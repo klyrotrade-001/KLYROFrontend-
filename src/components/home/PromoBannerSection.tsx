@@ -3,7 +3,7 @@ import { ArrowRight, MessageCircle, Tag } from "lucide-react";
 
 export default function PromoBannerSection() {
   return (
-    <section className="bg-white py-12 sm:py-16">
+    <section id="deals" className="bg-white py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-[28px] sm:rounded-[36px] bg-[#00501E] px-6 py-12 sm:px-12 sm:py-16 lg:px-16 lg:py-20 text-white shadow-xl">
           {/* Subtle natural lighting overlay */}
