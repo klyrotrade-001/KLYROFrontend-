@@ -101,12 +101,12 @@ export default function HeroSection() {
               </div>
             </div>
 
-            {/* Floating Card 1: Wireless Pocket Speaker (Bottom-Left corner) */}
+            {/* Floating Card 1: (Bottom-Left corner) */}
             <div className="absolute bottom-0 left-0 sm:-bottom-2 sm:-left-2 z-20 w-44 sm:w-56 rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-[0_18px_40px_rgba(0,0,0,0.12)] transition-transform duration-300 hover:-translate-y-1">
               <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-[#F7F8F6]">
                 <Image
                   src="https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=600&q=85"
-                  alt="Wireless Pocket Speaker"
+                  alt="Smart Audio"
                   fill
                   loading="eager"
                   sizes="220px"
@@ -118,17 +118,17 @@ export default function HeroSection() {
                   <p className="text-[10px] font-bold uppercase tracking-wider text-[#777777]">Acoustics</p>
                   <p className="text-xs font-bold text-[#151515]">Pocket Speaker</p>
                 </div>
-                <span className="text-xs font-black text-[#005E23]">₹1,299</span>
+                <span className="text-xs font-black text-[#005E23]">Shop Now</span>
               </div>
             </div>
 
-            {/* Floating Card 2: Cordless Food Chopper Preview (Top-Right corner) */}
+            {/* Floating Card 2: (Top-Right corner) */}
             <div className="hidden sm:block absolute top-1 -right-2 sm:-top-2 sm:-right-2 z-20 w-48 rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-[0_16px_36px_rgba(0,0,0,0.1)] transition-transform duration-300 hover:-translate-y-1">
               <div className="flex items-center gap-3">
                 <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-[#F7F8F6]">
                   <Image
                     src="https://images.unsplash.com/photo-1585515320310-259814833e62?auto=format&fit=crop&w=300&q=85"
-                    alt="Mini Electric Chopper"
+                    alt="Kitchen Essential"
                     fill
                     sizes="60px"
                     className="object-cover"
@@ -136,8 +136,8 @@ export default function HeroSection() {
                 </div>
                 <div>
                   <span className="text-[9px] font-bold uppercase tracking-wider text-[#005E23]">Bestseller</span>
-                  <p className="text-xs font-bold text-[#151515] line-clamp-1">Mini Chopper</p>
-                  <p className="text-xs font-bold text-[#777777]">₹499</p>
+                  <p className="text-xs font-bold text-[#151515] line-clamp-1">Kitchen Tools</p>
+                  <p className="text-xs font-medium text-[#777777]">Shop Now →</p>
                 </div>
               </div>
             </div>

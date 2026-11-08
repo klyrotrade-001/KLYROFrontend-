@@ -1,12 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { categories as fallbackCategories } from '@/src/data/products';
 import { getCategories } from '@/src/lib/api';
 import { CategoryInfo } from '@/src/types';
 
 export function useStoreCategories(): CategoryInfo[] {
-  const [categories, setCategories] = useState(fallbackCategories);
+  const [categories, setCategories] = useState<CategoryInfo[]>([]);
 
   useEffect(() => {
     getCategories()

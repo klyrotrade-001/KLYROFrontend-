@@ -16,7 +16,7 @@ import {
   Share2,
 } from 'lucide-react';
 import { useCart } from '@/src/context/CartContext';
-import { products as fallbackProducts, siteConfig } from '@/src/data/products';
+import { siteConfig } from '@/src/data/products';
 import { getProducts } from '@/src/lib/api';
 import { Product } from '@/src/types';
 import ProductCard from '@/src/components/product/ProductCard';
@@ -49,24 +49,12 @@ export default function ProductDetailPage() {
             all.filter((p) => p.categorySlug === found.categorySlug && p.id !== found.id).slice(0, 4)
           );
         } else {
-          const fallback = fallbackProducts.find((p) => p.slug === slug) || null;
-          setProduct(fallback);
-          if (fallback) {
-            setRelatedProducts(
-              fallbackProducts.filter((p) => p.categorySlug === fallback.categorySlug && p.id !== fallback.id).slice(0, 4)
-            );
-          }
+          setProduct(null);
         }
       })
       .catch(() => {
         if (!isMounted) return;
-        const fallback = fallbackProducts.find((p) => p.slug === slug) || null;
-        setProduct(fallback);
-        if (fallback) {
-          setRelatedProducts(
-            fallbackProducts.filter((p) => p.categorySlug === fallback.categorySlug && p.id !== fallback.id).slice(0, 4)
-          );
-        }
+        setProduct(null);
       })
       .finally(() => {
         if (isMounted) setLoading(false);
@@ -366,3 +354,4 @@ export default function ProductDetailPage() {
     </div>
   );
 }
+

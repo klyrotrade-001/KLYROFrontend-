@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Filter, SlidersHorizontal, Search, RefreshCw } from 'lucide-react';
 import ProductCard from '@/src/components/product/ProductCard';
-import { products as fallbackProducts } from '@/src/data/products';
 import { useStoreCategories } from '@/src/hooks/useStoreCategories';
 import { getProducts } from '@/src/lib/api';
 import { Product } from '@/src/types';
@@ -19,7 +18,7 @@ function ShopContent() {
   const searchParam = searchParams.get('search') || '';
 
   const categories = useStoreCategories();
-  const [products, setProducts] = useState<Product[]>(fallbackProducts);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(searchParam);
   const [selectedCategory, setSelectedCategory] = useState(categoryParam);
@@ -42,16 +41,12 @@ function ShopContent() {
     })
       .then((data) => {
         if (isMounted) {
-          if (Array.isArray(data) && data.length > 0) {
-            setProducts(data);
-          } else {
-            setProducts(fallbackProducts);
-          }
+          setProducts(Array.isArray(data) ? data : []);
         }
       })
       .catch(() => {
         if (isMounted) {
-          setProducts(fallbackProducts);
+          setProducts([]);
         }
       })
       .finally(() => {
@@ -301,3 +296,4 @@ export default function ShopPage() {
     </Suspense>
   );
 }
+
