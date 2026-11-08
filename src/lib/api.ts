@@ -1,7 +1,7 @@
 import { CartItem, CategoryInfo, CustomerDetails, Product } from '@/src/types';
 
 const API_BASE_URL = (
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'
+  process.env.NEXT_PUBLIC_API_URL || '/api'
 ).replace(/\/+$/, '');
 
 type ApiResponse<T extends object> = {
