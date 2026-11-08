@@ -18,3 +18,4 @@ The backend listens on `http://localhost:5001` by default. The frontend API clie
 
 The storefront updates product and category data from the backend. Bundled values remain available as initial fallbacks in the components that already use them.
 # KLYROF
+# KLYROFront-
