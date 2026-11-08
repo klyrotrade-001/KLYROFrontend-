@@ -4,7 +4,7 @@ import Order from '@/src/lib/models/Order';
 
 const WHATSAPP_NUMBER = '919292674447';
 
-function buildWhatsAppMessage(order: {
+function buildWhatsAppMessage(data: {
   id: string;
   customerName: string;
   phone: string;
@@ -12,21 +12,21 @@ function buildWhatsAppMessage(order: {
   items: { name: string; quantity: number; price: number }[];
   totalAmount: number;
 }) {
-  const itemLines = order.items
+  const itemLines = data.items
     .map((i) => `  • ${i.name} × ${i.quantity} = ₹${(i.price * i.quantity).toLocaleString('en-IN')}`)
     .join('\n');
 
   return `🛒 *New Order from KLYRO*
 
-*Order ID:* ${order.id}
-*Customer:* ${order.customerName}
-*Phone:* ${order.phone}
-*Address:* ${order.address}
+*Order ID:* ${data.id}
+*Customer:* ${data.customerName}
+*Phone:* ${data.phone}
+*Address:* ${data.address}
 
 *Items:*
 ${itemLines}
 
-*Total: ₹${order.totalAmount.toLocaleString('en-IN')}*
+*Total: ₹${data.totalAmount.toLocaleString('en-IN')}*
 
 Please confirm this order. Thank you! 🙏`;
 }
@@ -42,11 +42,19 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
 
-    const orderId = `ORD-${Date.now()}`;
-    const totalAmount = items.reduce(
-      (sum: number, i: any) => sum + i.price * i.quantity,
-      0
-    );
+    // CartItem structure: { product: Product, quantity: number, selectedVariant?: string }
+    const orderItems = (items as any[]).map((i) => {
+      const product = i.product ?? i;
+      return {
+        productId: String(product.id ?? i.productId ?? ''),
+        name: String(product.name ?? i.name ?? 'Unknown'),
+        price: Number(product.price ?? i.price ?? 0),
+        quantity: Number(i.quantity ?? 1),
+        image: String(product.images?.[0] ?? i.images?.[0] ?? ''),
+      };
+    });
+
+    const totalAmount = orderItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
     const address = [
       customer.houseBuilding,
@@ -59,49 +67,36 @@ export async function POST(req: NextRequest) {
       .filter(Boolean)
       .join(', ');
 
-    const orderData = {
+    const orderId = `ORD-${Date.now()}`;
+
+    const order = await Order.create({
       id: orderId,
       customerName: customer.fullName || customer.name || 'Customer',
       phone: customer.mobileNumber || customer.phone || '',
       email: customer.email || '',
       address,
-      items: items.map((i: any) => ({
-        productId: i.id,
-        name: i.name || i.product?.name,
-        price: i.price || i.product?.price,
-        quantity: i.quantity,
-        image: i.images?.[0] || i.product?.images?.[0] || '',
-      })),
+      items: orderItems,
       totalAmount,
       status: 'placed',
       statusHistory: [
         { status: 'placed', message: 'Order placed', updatedAt: new Date() },
       ],
-    };
-
-    const order = await Order.create(orderData);
-
-    // Build WhatsApp URL
-    const message = buildWhatsAppMessage({
-      id: order.id,
-      customerName: orderData.customerName,
-      phone: orderData.phone,
-      address: orderData.address,
-      items: orderData.items,
-      totalAmount: orderData.totalAmount,
     });
 
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    // Build WhatsApp message
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+      buildWhatsAppMessage({
+        id: order.id,
+        customerName: order.customerName,
+        phone: order.phone,
+        address: order.address,
+        items: orderItems,
+        totalAmount,
+      })
+    )}`;
 
-    return NextResponse.json({
-      success: true,
-      orderId: order.id,
-      whatsappUrl,
-    });
+    return NextResponse.json({ success: true, orderId: order.id, whatsappUrl });
   } catch (e: any) {
-    return NextResponse.json(
-      { success: false, error: e.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: e.message }, { status: 500 });
   }
 }
