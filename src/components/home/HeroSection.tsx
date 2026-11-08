@@ -98,21 +98,6 @@ export default function HeroSection() {
                   <span>4.9 / 5</span>
                   <span className="text-[10px] text-[#777777] font-normal">(1.4k+ reviews)</span>
                 </div>
-
-                {/* Bottom-Right Flagship Metadata Card (Placed away from bottom-left speaker card) */}
-                <div className="absolute bottom-3.5 right-3.5 sm:bottom-5 sm:right-5 z-10 max-w-[210px] sm:max-w-[250px] rounded-2xl bg-black/80 p-3.5 sm:p-4 text-white backdrop-blur-md border border-white/15 shadow-xl">
-                  <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-bold tracking-widest text-[#4ade80] uppercase">
-                    <span>001 / Flagship</span>
-                    <span>2026</span>
-                  </div>
-                  <h3 className="mt-1 text-xs sm:text-sm font-bold text-white line-clamp-1">
-                    Portable Mini Blender
-                  </h3>
-                  <div className="mt-2 flex items-center justify-between text-[10px] sm:text-[11px] text-[#DDDDDD] pt-1.5 border-t border-white/15">
-                    <span>Cordless USB-C</span>
-                    <span className="font-black text-white">₹899</span>
-                  </div>
-                </div>
               </div>
             </div>
 
