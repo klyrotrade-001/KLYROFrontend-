@@ -76,9 +76,9 @@ export default function HeroSection() {
           </div>
 
           {/* Right Column: Multi-Product Volitx Composition */}
-          <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
+          <div className="relative mx-auto w-full max-w-lg lg:max-w-none pt-6 pb-8 px-3 sm:pt-8 sm:pb-10 sm:px-6">
             {/* Main Stage Backdrop with subtle gradient card */}
-            <div className="relative aspect-[4/3] sm:aspect-[16/11] w-full overflow-hidden rounded-[32px] border border-[#E8ECE6] bg-gradient-to-br from-[#F7F8F6] to-[#ECEFEA] p-4 sm:p-7 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
+            <div className="relative aspect-[4/3] sm:aspect-[16/11] w-full overflow-hidden rounded-[28px] sm:rounded-[36px] border border-[#E8ECE6] bg-gradient-to-br from-[#F7F8F6] to-[#ECEFEA] p-3 sm:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
 
               {/* Product 1: Portable Mini Blender (Primary Focal Image) */}
               <div className="relative h-full w-full overflow-hidden rounded-2xl bg-white shadow-md">
@@ -92,32 +92,32 @@ export default function HeroSection() {
                   className="object-cover object-center"
                 />
 
-                {/* Overlaid Volitx-style Device Metadata Card */}
-                <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-auto sm:max-w-xs rounded-2xl bg-black/75 p-4 text-white backdrop-blur-md border border-white/10 shadow-xl">
-                  <div className="flex items-center justify-between text-[10px] font-bold tracking-widest text-[#4ade80] uppercase">
-                    <span>001 / Flagship</span>
-                    <span>2026 Edition</span>
-                  </div>
-                  <h3 className="mt-1 text-sm font-bold text-white sm:text-base">
-                    Portable Mini Blender
-                  </h3>
-                  <div className="mt-2 flex items-center justify-between text-[11px] text-[#DDDDDD] pt-2 border-t border-white/15">
-                    <span>Cordless USB-C • 18,000 RPM</span>
-                    <span className="font-black text-white">₹899</span>
-                  </div>
+                {/* Top-Left Rating Badge (Placed cleanly away from top-right floating card) */}
+                <div className="absolute top-3.5 left-3.5 sm:top-5 sm:left-5 z-10 flex items-center gap-1.5 rounded-full bg-white/95 px-3.5 py-1.5 shadow-md backdrop-blur-md text-xs font-bold text-[#151515] border border-black/5">
+                  <Star size={13} className="fill-[#F59E0B] text-[#F59E0B]" />
+                  <span>4.9 / 5</span>
+                  <span className="text-[10px] text-[#777777] font-normal">(1.4k+ reviews)</span>
                 </div>
 
-                {/* Top-right Rating Badge */}
-                <div className="absolute top-4 right-4 flex items-center gap-1 rounded-full bg-white/95 px-3 py-1.5 shadow-md backdrop-blur-sm text-xs font-bold text-[#151515]">
-                  <Star size={12} className="fill-[#005E23] text-[#005E23]" />
-                  <span>4.9 / 5</span>
-                  <span className="text-[10px] text-[#777777] font-normal">(140+)</span>
+                {/* Bottom-Right Flagship Metadata Card (Placed away from bottom-left speaker card) */}
+                <div className="absolute bottom-3.5 right-3.5 sm:bottom-5 sm:right-5 z-10 max-w-[210px] sm:max-w-[250px] rounded-2xl bg-black/80 p-3.5 sm:p-4 text-white backdrop-blur-md border border-white/15 shadow-xl">
+                  <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-bold tracking-widest text-[#4ade80] uppercase">
+                    <span>001 / Flagship</span>
+                    <span>2026</span>
+                  </div>
+                  <h3 className="mt-1 text-xs sm:text-sm font-bold text-white line-clamp-1">
+                    Portable Mini Blender
+                  </h3>
+                  <div className="mt-2 flex items-center justify-between text-[10px] sm:text-[11px] text-[#DDDDDD] pt-1.5 border-t border-white/15">
+                    <span>Cordless USB-C</span>
+                    <span className="font-black text-white">₹899</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Floating Side Card 1: Wireless Pocket Speaker / Fan */}
-            <div className="absolute -bottom-6 -left-4 sm:-bottom-8 sm:-left-6 w-44 sm:w-56 rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-[0_16px_36px_rgba(0,0,0,0.1)] transition-transform duration-300 hover:-translate-y-1">
+            {/* Floating Card 1: Wireless Pocket Speaker (Bottom-Left corner) */}
+            <div className="absolute bottom-0 left-0 sm:-bottom-2 sm:-left-2 z-20 w-44 sm:w-56 rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-[0_18px_40px_rgba(0,0,0,0.12)] transition-transform duration-300 hover:-translate-y-1">
               <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-[#F7F8F6]">
                 <Image
                   src="https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=600&q=85"
@@ -137,8 +137,8 @@ export default function HeroSection() {
               </div>
             </div>
 
-            {/* Floating Side Card 2: Cordless Food Chopper Preview */}
-            <div className="hidden sm:block absolute -top-5 -right-4 w-48 rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-[0_16px_36px_rgba(0,0,0,0.08)] transition-transform duration-300 hover:-translate-y-1">
+            {/* Floating Card 2: Cordless Food Chopper Preview (Top-Right corner) */}
+            <div className="hidden sm:block absolute top-1 -right-2 sm:-top-2 sm:-right-2 z-20 w-48 rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-[0_16px_36px_rgba(0,0,0,0.1)] transition-transform duration-300 hover:-translate-y-1">
               <div className="flex items-center gap-3">
                 <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-[#F7F8F6]">
                   <Image
