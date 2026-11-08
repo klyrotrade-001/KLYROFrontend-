@@ -1,9 +1,29 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { useStoreCategories } from "@/src/hooks/useStoreCategories";
+
+function CategoryCardImage({ src, alt }: { src: string; alt: string }) {
+  const [imgSrc, setImgSrc] = useState(src || "/categories/default.jpg");
+
+  return (
+    <Image
+      src={imgSrc}
+      alt={alt}
+      fill
+      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+      className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+      onError={() => {
+        if (imgSrc !== "/categories/default.jpg") {
+          setImgSrc("/categories/default.jpg");
+        }
+      }}
+    />
+  );
+}
 
 export default function CategorySection() {
   const categories = useStoreCategories();
@@ -47,12 +67,9 @@ export default function CategorySection() {
             >
               {/* Category Image */}
               <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-[#F7F8F6]">
-                <Image
+                <CategoryCardImage
                   src={category.image}
                   alt={category.name}
-                  fill
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
                 />
                 <span className="absolute bottom-2.5 right-2.5 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-[#151515] opacity-0 shadow-sm backdrop-blur-sm transition-all duration-200 group-hover:opacity-100 group-hover:bg-[#005E23] group-hover:text-white">
                   <ArrowUpRight size={14} />

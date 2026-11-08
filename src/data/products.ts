@@ -17,7 +17,7 @@ export const categories: CategoryInfo[] = [
     slug: "mini-electronics",
     description: "Compact smart audio, cooling fans, desk sweepers, and ambient lighting for modern workspaces.",
     itemCount: 4,
-    image: "/categories/mini-electronics.jpg",
+    image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=800&q=85",
   },
   {
     id: "baby-products-toys",
@@ -25,7 +25,7 @@ export const categories: CategoryInfo[] = [
     slug: "baby-products-toys",
     description: "Certified food-grade silicone sets, gentle grooming tools, and mindful educational wooden toys.",
     itemCount: 4,
-    image: "/categories/baby-products-toys.jpg",
+    image: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&w=800&q=85",
   },
   {
     id: "mini-nebulizers",
@@ -33,7 +33,7 @@ export const categories: CategoryInfo[] = [
     slug: "mini-nebulizers",
     description: "Quiet ultrasonic mesh inhalers and portable steam vaporizers for fast respiratory relief on the go.",
     itemCount: 2,
-    image: "/categories/mini-nebulizers.jpg",
+    image: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=800&q=85",
   },
   {
     id: "tools",
@@ -41,7 +41,7 @@ export const categories: CategoryInfo[] = [
     slug: "tools",
     description: "Ergonomic cordless mini drills, precision magnetic screwdriver sets, and digital laser measuring tools.",
     itemCount: 3,
-    image: "/categories/tools.jpg",
+    image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800&q=85",
   },
   {
     id: "kitchen-items",
@@ -49,7 +49,7 @@ export const categories: CategoryInfo[] = [
     slug: "kitchen-items",
     description: "Cordless personal blenders, one-touch food choppers, borosilicate oil sprayers, and precision gram scales.",
     itemCount: 4,
-    image: "/categories/kitchen-items.jpg",
+    image: "https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=800&q=85",
   },
 ];
 
