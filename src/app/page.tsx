@@ -14,10 +14,10 @@ export default function HomePage() {
       <CategorySection />
       <FeaturedCollectionSection />
       <NewArrivalsSection />
-      <PromoBannerSection />
       <BestSellersSection />
       <WhyChooseSection />
       <TrustAndReviewsSection />
+      <PromoBannerSection />
     </>
   );
 }
