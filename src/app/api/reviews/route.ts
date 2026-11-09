@@ -9,7 +9,11 @@ export async function GET(req: NextRequest) {
     const slug = new URL(req.url).searchParams.get('slug');
     if (!slug) return NextResponse.json({ success: false, error: 'slug required' }, { status: 400 });
 
-    const reviews = await Review.find({ productSlug: slug, approved: true })
+    // Match approved:true OR status:'approved' — handles legacy records before migration
+    const reviews = await Review.find({
+      productSlug: slug,
+      $or: [{ approved: true }, { status: 'approved' }],
+    })
       .sort({ createdAt: -1 })
       .lean();
 
