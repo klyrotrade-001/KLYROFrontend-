@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: '**' },
     ],
   },
+  experimental: {
+    optimizeCss: true,
+  },
 };
 
 export default nextConfig;

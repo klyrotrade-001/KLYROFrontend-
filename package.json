@@ -19,6 +19,7 @@
     "@types/node": "^20.19.43",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "critters": "^0.0.22",
     "tailwindcss": "^4.3.5",
     "typescript": "^5.9.3"
   }
