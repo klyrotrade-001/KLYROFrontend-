@@ -109,10 +109,10 @@ export default function TrackPage() {
               </div>
 
               {/* Progress Steps */}
-              <div className="flex items-center justify-between relative mb-6">
+              <div className="flex items-start justify-between relative mb-6">
                 <div className="absolute left-0 right-0 top-4 h-0.5 bg-[#E8ECE6] -z-0" />
                 {statusSteps.map((step, i) => (
-                  <div key={step} className="flex flex-col items-center gap-1.5 z-10">
+                  <div key={step} className="flex flex-col items-center gap-1 z-10 flex-1">
                     <div className={`h-8 w-8 rounded-full flex items-center justify-center border-2 transition-all ${
                       i <= currentStep
                         ? 'bg-[#005E23] border-[#005E23]'
@@ -126,7 +126,7 @@ export default function TrackPage() {
                         <Clock size={13} className="text-[#CCCCCC]" />
                       )}
                     </div>
-                    <span className={`text-[9px] font-bold text-center leading-tight ${
+                    <span className={`text-[8px] sm:text-[9px] font-bold text-center leading-tight max-w-[40px] sm:max-w-none ${
                       i <= currentStep ? 'text-[#005E23]' : 'text-[#CCCCCC]'
                     }`}>
                       {statusLabel[step]}

@@ -101,7 +101,7 @@ export default function CartDrawer() {
       <div className="flex-1" onClick={closeCart} />
 
       {/* Slide-over Drawer */}
-      <div className="relative flex h-full w-full max-w-md flex-col bg-white shadow-2xl animate-in slide-in-from-right duration-250">
+      <div className="relative flex h-full w-full max-w-full sm:max-w-md flex-col bg-white shadow-2xl animate-in slide-in-from-right duration-250">
         {/* Drawer Header */}
         <div className="flex items-center justify-between border-b border-[#E8ECE6] px-6 py-4">
           <div className="flex items-center gap-2">

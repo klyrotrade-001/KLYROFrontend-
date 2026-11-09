@@ -118,23 +118,23 @@ export default function ProductDetailPage() {
     <div className="min-h-screen bg-[#FBFBFA] pt-6 pb-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-xs text-[#777] border-b border-[#E8ECE6] pb-4">
-          <Link href="/" className="hover:text-[#005E23]">Home</Link>
-          <span>/</span>
-          <Link href="/shop" className="hover:text-[#005E23]">Shop</Link>
-          <span>/</span>
-          <Link href={`/shop?category=${product.categorySlug}`} className="hover:text-[#005E23]">
+        <div className="flex items-center gap-1.5 text-xs text-[#777] border-b border-[#E8ECE6] pb-4 overflow-x-auto whitespace-nowrap scrollbar-none">
+          <Link href="/" className="hover:text-[#005E23] shrink-0">Home</Link>
+          <span className="shrink-0">/</span>
+          <Link href="/shop" className="hover:text-[#005E23] shrink-0">Shop</Link>
+          <span className="shrink-0">/</span>
+          <Link href={`/shop?category=${product.categorySlug}`} className="hover:text-[#005E23] shrink-0">
             {product.category}
           </Link>
-          <span>/</span>
-          <span className="font-semibold text-[#151515] truncate max-w-[200px]">{product.name}</span>
+          <span className="shrink-0">/</span>
+          <span className="font-semibold text-[#151515] truncate">{product.name}</span>
         </div>
 
         {/* Product Details Section */}
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
           {/* Left: Gallery (6 cols) */}
-          <div className="lg:col-span-6 flex flex-col gap-4">
-            <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-white border border-[#E8ECE6] shadow-sm">
+          <div className="lg:col-span-6 flex flex-col gap-3 sm:gap-4">
+            <div className="relative aspect-square w-full overflow-hidden rounded-2xl sm:rounded-3xl bg-white border border-[#E8ECE6] shadow-sm">
               <Image
                 src={currentImage}
                 alt={product.name}
@@ -143,7 +143,7 @@ export default function ProductDetailPage() {
                 className="object-cover object-center"
               />
               {product.discount > 0 && (
-                <span className="absolute top-4 left-4 z-10 rounded-full bg-[#005E23] px-3.5 py-1 text-xs font-bold text-white shadow-md">
+                <span className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 rounded-full bg-[#005E23] px-3 py-1 text-xs font-bold text-white shadow-md">
                   -{product.discount}% OFF
                 </span>
               )}
@@ -151,13 +151,13 @@ export default function ProductDetailPage() {
 
             {/* Thumbnails */}
             {product.images.length > 1 && (
-              <div className="flex items-center gap-3 overflow-x-auto pb-2">
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
                 {product.images.map((img, idx) => (
                   <button
                     key={idx}
                     type="button"
                     onClick={() => setSelectedImage(idx)}
-                    className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border-2 transition-all ${
+                    className={`relative h-16 w-16 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-xl border-2 transition-all ${
                       selectedImage === idx
                         ? 'border-[#005E23] shadow-md ring-2 ring-[#005E23]/20'
                         : 'border-[#E8ECE6] opacity-70 hover:opacity-100'

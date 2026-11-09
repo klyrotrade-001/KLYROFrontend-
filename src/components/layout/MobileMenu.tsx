@@ -20,7 +20,7 @@ export default function MobileMenu() {
         <span className="sr-only">Open navigation menu</span>
         <Menu size={22} strokeWidth={1.7} />
       </summary>
-      <div className="absolute right-0 top-12 z-30 w-64 rounded-2xl border border-black/10 bg-white p-3 shadow-xl">
+      <div className="absolute right-0 top-12 z-30 w-72 rounded-2xl border border-black/10 bg-white p-3 shadow-xl">
         {links.map((link) => (
           <Link
             key={link.label}
@@ -44,12 +44,6 @@ export default function MobileMenu() {
             </Link>
           ))}
         </div>
-        <Link
-          href="/#why-klyro"
-          className="mt-2 block rounded-xl bg-[#171717] px-4 py-3 text-center text-sm font-semibold text-white"
-        >
-          Sign in
-        </Link>
       </div>
     </details>
   );

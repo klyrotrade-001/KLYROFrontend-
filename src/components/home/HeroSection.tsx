@@ -75,13 +75,11 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Right Column: Multi-Product Volitx Composition */}
-          <div className="relative mx-auto w-full max-w-lg lg:max-w-none pt-6 pb-8 px-3 sm:pt-8 sm:pb-10 sm:px-6">
-            {/* Main Stage Backdrop with subtle gradient card */}
-            <div className="relative aspect-[4/3] sm:aspect-[16/11] w-full overflow-hidden rounded-[28px] sm:rounded-[36px] border border-[#E8ECE6] bg-gradient-to-br from-[#F7F8F6] to-[#ECEFEA] p-3 sm:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
-
-              {/* Product 1: Portable Mini Blender (Primary Focal Image) */}
-              <div className="relative h-full w-full overflow-hidden rounded-2xl bg-white shadow-md">
+          {/* Right Column: Multi-Product Composition */}
+          <div className="relative mx-auto w-full max-w-sm sm:max-w-lg lg:max-w-none pt-4 pb-10 px-2 sm:pt-8 sm:pb-12 sm:px-6">
+            {/* Main Stage */}
+            <div className="relative aspect-[4/3] sm:aspect-[16/11] w-full overflow-hidden rounded-[24px] sm:rounded-[36px] border border-[#E8ECE6] bg-gradient-to-br from-[#F7F8F6] to-[#ECEFEA] p-2.5 sm:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
+              <div className="relative h-full w-full overflow-hidden rounded-xl sm:rounded-2xl bg-white shadow-md">
                 <Image
                   src="https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=1200&q=90"
                   alt="KLYRO Portable Mini Blender"
@@ -91,39 +89,37 @@ export default function HeroSection() {
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover object-center"
                 />
-
-                {/* Top-Left Rating Badge (Placed cleanly away from top-right floating card) */}
-                <div className="absolute top-3.5 left-3.5 sm:top-5 sm:left-5 z-10 flex items-center gap-1.5 rounded-full bg-white/95 px-3.5 py-1.5 shadow-md backdrop-blur-md text-xs font-bold text-[#151515] border border-black/5">
-                  <Star size={13} className="fill-[#F59E0B] text-[#F59E0B]" />
+                <div className="absolute top-3 left-3 sm:top-5 sm:left-5 z-10 flex items-center gap-1 sm:gap-1.5 rounded-full bg-white/95 px-2.5 py-1 sm:px-3.5 sm:py-1.5 shadow-md backdrop-blur-md text-[10px] sm:text-xs font-bold text-[#151515] border border-black/5">
+                  <Star size={11} className="fill-[#F59E0B] text-[#F59E0B]" />
                   <span>4.9 / 5</span>
-                  <span className="text-[10px] text-[#777777] font-normal">(1.4k+ reviews)</span>
+                  <span className="hidden sm:inline text-[10px] text-[#777777] font-normal">(1.4k+ reviews)</span>
                 </div>
               </div>
             </div>
 
-            {/* Floating Card 1: (Bottom-Left corner) */}
-            <div className="absolute bottom-0 left-0 sm:-bottom-2 sm:-left-2 z-20 w-44 sm:w-56 rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-[0_18px_40px_rgba(0,0,0,0.12)] transition-transform duration-300 hover:-translate-y-1">
-              <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-[#F7F8F6]">
+            {/* Floating Card 1 — bottom-left, smaller on mobile */}
+            <div className="absolute bottom-0 left-0 sm:-bottom-2 sm:-left-2 z-20 w-36 sm:w-52 rounded-xl sm:rounded-2xl border border-[#E8ECE6] bg-white p-2 sm:p-3 shadow-[0_12px_32px_rgba(0,0,0,0.12)] transition-transform duration-300 hover:-translate-y-1">
+              <div className="relative aspect-video w-full overflow-hidden rounded-lg sm:rounded-xl bg-[#F7F8F6]">
                 <Image
                   src="https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=600&q=85"
                   alt="Smart Audio"
                   fill
                   loading="eager"
-                  sizes="220px"
+                  sizes="200px"
                   className="object-cover"
                 />
               </div>
-              <div className="mt-2.5 flex items-center justify-between">
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#777777]">Acoustics</p>
-                  <p className="text-xs font-bold text-[#151515]">Pocket Speaker</p>
+              <div className="mt-2 flex items-center justify-between gap-1">
+                <div className="min-w-0">
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-[#777777]">Acoustics</p>
+                  <p className="text-[10px] sm:text-xs font-bold text-[#151515] truncate">Pocket Speaker</p>
                 </div>
-                <span className="text-xs font-black text-[#005E23]">Shop Now</span>
+                <span className="shrink-0 text-[10px] sm:text-xs font-black text-[#005E23]">→</span>
               </div>
             </div>
 
-            {/* Floating Card 2: (Top-Right corner) */}
-            <div className="hidden sm:block absolute top-1 -right-2 sm:-top-2 sm:-right-2 z-20 w-48 rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-[0_16px_36px_rgba(0,0,0,0.1)] transition-transform duration-300 hover:-translate-y-1">
+            {/* Floating Card 2 — hidden on mobile, shown sm+ */}
+            <div className="hidden sm:block absolute -top-2 -right-2 z-20 w-48 rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-[0_16px_36px_rgba(0,0,0,0.1)] transition-transform duration-300 hover:-translate-y-1">
               <div className="flex items-center gap-3">
                 <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-[#F7F8F6]">
                   <Image
@@ -141,7 +137,6 @@ export default function HeroSection() {
                 </div>
               </div>
             </div>
-
           </div>
 
         </div>

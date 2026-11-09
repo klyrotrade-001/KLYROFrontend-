@@ -85,13 +85,13 @@ export default function FeaturedCollectionSection() {
 
             {/* Right Column (7 cols): Visual Collage */}
             <div className="lg:col-span-7">
-              <div className="grid grid-cols-12 gap-4 items-center">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-12 items-center">
                 
                 {/* Main Featured Item */}
-                <div className="col-span-12 sm:col-span-7">
+                <div className="sm:col-span-7">
                   <Link
                     href={`/product/${blender.slug}`}
-                    className="group relative block aspect-[4/5] w-full overflow-hidden rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-md transition-all duration-300 hover:shadow-xl"
+                    className="group relative block aspect-[3/4] sm:aspect-[4/5] w-full overflow-hidden rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-md transition-all duration-300 hover:shadow-xl"
                   >
                     <div className="relative h-full w-full overflow-hidden rounded-xl bg-[#F7F8F6]">
                       <Image
@@ -119,7 +119,7 @@ export default function FeaturedCollectionSection() {
                 </div>
 
                 {/* Sub-featured Items Stack */}
-                <div className="col-span-12 sm:col-span-5 space-y-4">
+                <div className="sm:col-span-5 grid grid-cols-2 gap-3 sm:grid-cols-1 sm:space-y-0 sm:flex sm:flex-col sm:gap-4">
                   {chopper && (
                     <Link
                       href={`/product/${chopper.slug}`}
