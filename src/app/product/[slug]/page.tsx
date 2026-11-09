@@ -20,6 +20,7 @@ import { siteConfig } from '@/src/data/products';
 import { getProducts } from '@/src/lib/api';
 import { Product } from '@/src/types';
 import ProductCard from '@/src/components/product/ProductCard';
+import ReviewSection from '@/src/components/product/ReviewSection';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -338,6 +339,13 @@ export default function ProductDetailPage() {
             </div>
           </div>
         </div>
+
+        {/* Reviews Section */}
+        <ReviewSection
+          productSlug={slug}
+          productId={product.id}
+          productName={product.name}
+        />
 
         {/* Related Products Section */}
         {relatedProducts.length > 0 && (
