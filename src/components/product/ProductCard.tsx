@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Heart, Star } from "lucide-react";
 import { Product } from "@/src/types";
 import { useCart } from "@/src/context/CartContext";
+import { useToast } from "@/src/hooks/useToast";
 import AddToCartButton from "@/src/components/buttons/AddToCartButton";
 import BuyNowButton from "@/src/components/buttons/BuyNowButton";
 import ProductImage from "@/src/components/product/ProductImage";
@@ -16,14 +17,25 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, priorityImage = false }: ProductCardProps) {
   const { addToCart } = useCart();
+  const { showToast } = useToast();
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const handleAddToCart = () => {
-    addToCart(product, 1, product.variants?.[0]?.options[0], true);
+    const result = addToCart(product, 1, product.variants?.[0]?.options[0], true);
+    if (result.success) {
+      showToast(result.message, 'success');
+    } else {
+      showToast(result.message, 'error');
+    }
   };
 
   const handleBuyNow = () => {
-    addToCart(product, 1, product.variants?.[0]?.options[0], true);
+    const result = addToCart(product, 1, product.variants?.[0]?.options[0], true);
+    if (result.success) {
+      showToast(result.message, 'success');
+    } else {
+      showToast(result.message, 'error');
+    }
   };
 
   const handleToggleWishlist = (e: React.MouseEvent) => {

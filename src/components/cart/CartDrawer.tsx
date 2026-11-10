@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { X, ShoppingBag, Trash2, Plus, Minus, ArrowRight, MessageCircle, CheckCircle2, ShieldCheck, Check } from "lucide-react";
 import { useCart } from "@/src/context/CartContext";
+import { useToast } from "@/src/hooks/useToast";
 import { siteConfig } from "@/src/data/products";
 import { CustomerDetails } from "@/src/types";
 import { createOrder } from "@/src/lib/api";
@@ -23,6 +24,7 @@ export default function CartDrawer() {
     totalAmount,
     clearCart,
   } = useCart();
+  const { showToast } = useToast();
 
   const [step, setStep] = useState<'cart' | 'checkout' | 'success'>('cart');
   const [createdOrderId, setCreatedOrderId] = useState<string>('');
@@ -233,7 +235,10 @@ export default function CartDrawer() {
                         </div>
                         <button
                           type="button"
-                          onClick={() => removeFromCart(item.product.id, item.selectedVariant)}
+                          onClick={() => {
+                            removeFromCart(item.product.id, item.selectedVariant);
+                            showToast('Item removed from cart', 'success');
+                          }}
                           aria-label="Remove item"
                           className="text-[#999999] hover:text-red-600 transition-colors"
                         >
@@ -245,7 +250,12 @@ export default function CartDrawer() {
                         <div className="flex items-center rounded-full border border-[#E8ECE6] bg-[#F7F8F6] p-0.5">
                           <button
                             type="button"
-                            onClick={() => updateQuantity(item.product.id, item.quantity - 1, item.selectedVariant)}
+                            onClick={() => {
+                              const result = updateQuantity(item.product.id, item.quantity - 1, item.selectedVariant);
+                              if (!result.success) {
+                                showToast(result.message, 'error');
+                              }
+                            }}
                             className="flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold hover:bg-white"
                           >
                             <Minus size={11} />
@@ -255,7 +265,12 @@ export default function CartDrawer() {
                           </span>
                           <button
                             type="button"
-                            onClick={() => updateQuantity(item.product.id, item.quantity + 1, item.selectedVariant)}
+                            onClick={() => {
+                              const result = updateQuantity(item.product.id, item.quantity + 1, item.selectedVariant);
+                              if (!result.success) {
+                                showToast(result.message, 'error');
+                              }
+                            }}
                             className="flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold hover:bg-white"
                           >
                             <Plus size={11} />

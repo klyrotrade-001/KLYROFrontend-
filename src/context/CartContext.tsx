@@ -1,14 +1,14 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { Product, CartItem, CustomerDetails } from '@/src/types';
 import { siteConfig } from '@/src/data/products';
 
 interface CartContextType {
   cart: CartItem[];
-  addToCart: (product: Product, quantity?: number, selectedVariant?: string, openDrawer?: boolean) => void;
+  addToCart: (product: Product, quantity?: number, selectedVariant?: string, openDrawer?: boolean) => { success: boolean; message: string };
   removeFromCart: (productId: string, selectedVariant?: string) => void;
-  updateQuantity: (productId: string, quantity: number, selectedVariant?: string) => void;
+  updateQuantity: (productId: string, quantity: number, selectedVariant?: string) => { success: boolean; message: string };
   clearCart: () => void;
   totalItems: number;
   subtotal: number;
@@ -25,15 +25,18 @@ interface CartContextType {
   closeQuickView: () => void;
   generateWhatsAppOrderUrl: (customerDetails: CustomerDetails) => string;
   generateSingleProductWhatsAppUrl: (product: Product, quantity: number, variant?: string) => string;
+  isLoading: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 const STORAGE_KEY = 'klyro_cart_v2';
+const MAX_QUANTITY_PER_ITEM = 10; // Maximum quantity allowed per product
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
@@ -64,27 +67,72 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [cart, isLoaded]);
 
-  const addToCart = (
+  const addToCart = useCallback((
     product: Product,
     quantity: number = 1,
     selectedVariant?: string,
     openDrawer: boolean = true
-  ) => {
-    setCart((prev) => {
-      const existingIndex = prev.findIndex(
-        (item) => item.product.id === product.id && item.selectedVariant === selectedVariant
-      );
-      if (existingIndex > -1) {
-        const updated = [...prev];
-        updated[existingIndex].quantity += quantity;
-        return updated;
-      }
-      return [...prev, { product, quantity, selectedVariant }];
-    });
-    if (openDrawer) {
-      setIsCartOpen(true);
+  ): { success: boolean; message: string } => {
+    // Validation
+    if (!product || !product.id) {
+      return { success: false, message: 'Invalid product' };
     }
-  };
+
+    if (quantity <= 0) {
+      return { success: false, message: 'Quantity must be at least 1' };
+    }
+
+    if (!product.inStock) {
+      return { success: false, message: `${product.name} is currently out of stock` };
+    }
+
+    // Check if adding this quantity would exceed max
+    const existingItem = cart.find(
+      (item) => item.product.id === product.id && item.selectedVariant === selectedVariant
+    );
+    const newTotalQuantity = (existingItem?.quantity || 0) + quantity;
+
+    if (newTotalQuantity > MAX_QUANTITY_PER_ITEM) {
+      return { 
+        success: false, 
+        message: `Maximum ${MAX_QUANTITY_PER_ITEM} items allowed per product` 
+      };
+    }
+
+    setIsLoading(true);
+    try {
+      setCart((prev) => {
+        const existingIndex = prev.findIndex(
+          (item) => item.product.id === product.id && item.selectedVariant === selectedVariant
+        );
+        
+        if (existingIndex > -1) {
+          const updated = [...prev];
+          updated[existingIndex] = {
+            ...updated[existingIndex],
+            quantity: updated[existingIndex].quantity + quantity
+          };
+          return updated;
+        }
+        
+        return [...prev, { product, quantity, selectedVariant }];
+      });
+
+      if (openDrawer) {
+        setTimeout(() => setIsCartOpen(true), 100);
+      }
+
+      return { 
+        success: true, 
+        message: `${product.name} added to cart` 
+      };
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      return { success: false, message: 'Failed to add item to cart' };
+    } finally {
+      setIsLoading(false);
+    }
+  }, [cart]);
 
   const removeFromCart = (productId: string, selectedVariant?: string) => {
     setCart((prev) =>
@@ -94,11 +142,39 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
-  const updateQuantity = (productId: string, quantity: number, selectedVariant?: string) => {
-    if (quantity <= 0) {
-      removeFromCart(productId, selectedVariant);
-      return;
+  const updateQuantity = useCallback((
+    productId: string, 
+    quantity: number, 
+    selectedVariant?: string
+  ): { success: boolean; message: string } => {
+    if (quantity < 0) {
+      return { success: false, message: 'Invalid quantity' };
     }
+
+    if (quantity === 0) {
+      removeFromCart(productId, selectedVariant);
+      return { success: true, message: 'Item removed from cart' };
+    }
+
+    if (quantity > MAX_QUANTITY_PER_ITEM) {
+      return { 
+        success: false, 
+        message: `Maximum ${MAX_QUANTITY_PER_ITEM} items allowed` 
+      };
+    }
+
+    const item = cart.find(
+      (item) => item.product.id === productId && item.selectedVariant === selectedVariant
+    );
+
+    if (!item) {
+      return { success: false, message: 'Item not found in cart' };
+    }
+
+    if (!item.product.inStock) {
+      return { success: false, message: 'This item is out of stock' };
+    }
+
     setCart((prev) =>
       prev.map((item) =>
         item.product.id === productId && item.selectedVariant === selectedVariant
@@ -106,7 +182,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           : item
       )
     );
-  };
+
+    return { success: true, message: 'Quantity updated' };
+  }, [cart]);
 
   const clearCart = () => {
     setCart([]);
@@ -219,6 +297,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         closeQuickView,
         generateWhatsAppOrderUrl,
         generateSingleProductWhatsAppUrl,
+        isLoading,
       }}
     >
       {children}
