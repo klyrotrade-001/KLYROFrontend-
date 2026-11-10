@@ -18,8 +18,10 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
 
   return (
     <>
-      <AnnouncementBar />
-      <Navbar />
+      <div className="sticky top-0 z-50">
+        <AnnouncementBar />
+        <Navbar />
+      </div>
       <main>{children}</main>
       <Footer />
     </>
