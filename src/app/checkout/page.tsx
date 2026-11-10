@@ -10,9 +10,6 @@ import { createOrder } from '@/src/lib/api';
 import { siteConfig } from '@/src/data/products';
 import ProductImage from '@/src/components/product/ProductImage';
 
-// Force dynamic rendering to avoid prerender errors with useSearchParams
-export const dynamic = 'force-dynamic';
-
 function CheckoutPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
