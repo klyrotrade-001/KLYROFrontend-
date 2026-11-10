@@ -1,7 +1,6 @@
 'use client';
 
 import Link from "next/link";
-import Image from "next/image";
 import { ChevronDown, Search, ShoppingBag } from "lucide-react";
 import MobileMenu from "./MobileMenu";
 import { useCart } from "@/src/context/CartContext";
@@ -21,15 +20,11 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-20 border-b border-black/10 bg-[#fbfaf8]/95 backdrop-blur-md">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-5 lg:grid lg:grid-cols-[1fr_auto_auto] lg:px-8">
-        <Link href="/" className="shrink-0" aria-label="KLYRO home">
-          <Image
-            src="https://www.klyroo.online/images/klyro-logo.png"
-            alt="KLYRO"
-            width={126}
-            height={20}
-            priority
-            className="h-auto w-26 object-contain"
-          />
+        <Link href="/" className="shrink-0 flex items-center gap-1.5" aria-label="KLYRO home">
+          <span className="text-2xl font-black tracking-[-0.04em] text-[#151515]">
+            KLYRO
+          </span>
+          <span className="inline-block h-2 w-2 rounded-full bg-[#005E23]" />
         </Link>
 
         <div className="hidden items-center justify-self-end gap-10 pr-10 lg:flex">
