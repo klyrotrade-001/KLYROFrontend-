@@ -30,12 +30,13 @@ export default function ProductCard({ product, priorityImage = false }: ProductC
   };
 
   const handleBuyNow = () => {
-    const result = addToCart(product, 1, product.variants?.[0]?.options[0], true);
-    if (result.success) {
-      showToast(result.message, 'success');
-    } else {
-      showToast(result.message, 'error');
-    }
+    const productData = {
+      product,
+      quantity: 1,
+      variant: product.variants?.[0]?.options[0]
+    };
+    const encodedData = encodeURIComponent(JSON.stringify(productData));
+    window.location.href = `/checkout?product=${encodedData}`;
   };
 
   const handleToggleWishlist = (e: React.MouseEvent) => {
