@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { X, MessageCircle, Star, ShieldCheck, Truck, Check } from "lucide-react";
@@ -9,6 +10,7 @@ import AddToCartButton from "@/src/components/buttons/AddToCartButton";
 import BuyNowButton from "@/src/components/buttons/BuyNowButton";
 
 export default function ProductDetailModal() {
+  const router = useRouter();
   const { quickViewProduct, closeQuickView, addToCart, generateSingleProductWhatsAppUrl } = useCart();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState<string>("");
@@ -195,7 +197,7 @@ export default function ProductDetailModal() {
                     variant: currentVariant
                   };
                   const encodedData = encodeURIComponent(JSON.stringify(productData));
-                  window.location.href = `/checkout?product=${encodedData}`;
+                  router.push(`/checkout?product=${encodedData}`);
                 }}
                 className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#005E23] bg-[#005E23] py-2.5 px-2 text-[11px] sm:text-xs font-bold text-white shadow-sm transition-all hover:bg-[#004719] hover:border-[#004719] active:scale-95"
               >

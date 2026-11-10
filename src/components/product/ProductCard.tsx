@@ -1,6 +1,7 @@
 'use client';
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Heart, Star } from "lucide-react";
 import { Product } from "@/src/types";
@@ -16,6 +17,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, priorityImage = false }: ProductCardProps) {
+  const router = useRouter();
   const { addToCart } = useCart();
   const { showToast } = useToast();
   const [isWishlisted, setIsWishlisted] = useState(false);
@@ -36,7 +38,7 @@ export default function ProductCard({ product, priorityImage = false }: ProductC
       variant: product.variants?.[0]?.options[0]
     };
     const encodedData = encodeURIComponent(JSON.stringify(productData));
-    window.location.href = `/checkout?product=${encodedData}`;
+    router.push(`/checkout?product=${encodedData}`);
   };
 
   const handleToggleWishlist = (e: React.MouseEvent) => {
