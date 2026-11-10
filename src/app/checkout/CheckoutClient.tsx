@@ -1,27 +1,27 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { ShieldCheck, ArrowLeft, Check } from 'lucide-react';
 import { useCart } from '@/src/context/CartContext';
-import { CustomerDetails, Product } from '@/src/types';
+import { CartItem, CustomerDetails } from '@/src/types';
 import { createOrder } from '@/src/lib/api';
 import { siteConfig } from '@/src/data/products';
 import ProductImage from '@/src/components/product/ProductImage';
 
 export default function CheckoutClient() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { cart, clearCart } = useCart();
-  
+
   const [step, setStep] = useState<'form' | 'success'>('form');
   const [createdOrderId, setCreatedOrderId] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [buyNowProduct, setBuyNowProduct] = useState<Product | null>(null);
-  const [buyNowQuantity, setBuyNowQuantity] = useState(1);
-  const [buyNowVariant, setBuyNowVariant] = useState<string>();
-  
+
+  // buyNowItems holds the parsed item from URL; null = not a Buy Now session
+  const [buyNowItems, setBuyNowItems] = useState<CartItem[] | null>(null);
+  // true once we've attempted to read URL params (prevents flash of "empty cart")
+  const [isReady, setIsReady] = useState(false);
+
   const [formData, setFormData] = useState<CustomerDetails>({
     fullName: '',
     mobileNumber: '',
@@ -36,53 +36,86 @@ export default function CheckoutClient() {
   });
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
-  // Check if this is a "Buy Now" direct purchase
+  // Read buyNow params from URL on mount (client-only)
   useEffect(() => {
-    // Guard against SSR and ensure searchParams is available
-    if (!searchParams) return;
-    
-    const productData = searchParams.get('product');
-    if (productData) {
-      try {
-        const data = JSON.parse(decodeURIComponent(productData));
-        setBuyNowProduct(data.product);
-        setBuyNowQuantity(data.quantity || 1);
-        setBuyNowVariant(data.variant);
-      } catch (error) {
-        console.error('Error parsing product data:', error);
-      }
-    }
-  }, [searchParams]);
+    if (typeof window === 'undefined') return;
 
-  // Determine items to checkout
-  const checkoutItems = buyNowProduct 
-    ? [{ product: buyNowProduct, quantity: buyNowQuantity, selectedVariant: buyNowVariant }]
-    : cart;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('buyNow');
+
+      if (raw) {
+        const decoded = JSON.parse(decodeURIComponent(raw));
+
+        // Build a CartItem-compatible object from the minimal encoded data.
+        // ProductCard / ProductDetailModal both send:
+        // { id, name, price, image, quantity, variant }
+        const cartItem: CartItem = {
+          quantity: decoded.quantity || 1,
+          selectedVariant: decoded.variant,
+          product: {
+            // Required Product fields – fill from decoded data
+            id: decoded.id ?? '',
+            slug: decoded.slug ?? decoded.id ?? '',
+            name: decoded.name ?? 'Product',
+            category: decoded.category ?? 'Mini Electronics',
+            categorySlug: decoded.categorySlug ?? '',
+            price: decoded.price ?? 0,
+            originalPrice: decoded.originalPrice ?? decoded.price ?? 0,
+            discount: decoded.discount ?? 0,
+            description: decoded.description ?? '',
+            features: decoded.features ?? [],
+            // Support both `images` array and single `image` string
+            images: decoded.images?.length
+              ? decoded.images
+              : decoded.image
+              ? [decoded.image]
+              : ['/placeholder.png'],
+            inStock: true,
+            rating: decoded.rating ?? 5,
+            reviewsCount: decoded.reviewsCount ?? 0,
+          },
+        };
+
+        setBuyNowItems([cartItem]);
+      }
+    } catch (err) {
+      console.error('Failed to parse buyNow param:', err);
+    }
+
+    setIsReady(true);
+  }, []);
+
+  // Determine which items to show at checkout
+  const checkoutItems: CartItem[] = buyNowItems ?? cart;
 
   const subtotal = checkoutItems.reduce(
-    (sum, item) => sum + item.product.price * item.quantity, 
+    (sum, item) => sum + item.product.price * item.quantity,
     0
   );
-  const shippingFee = subtotal >= siteConfig.freeShippingThreshold || subtotal === 0 
-    ? 0 
-    : siteConfig.standardShippingFee;
+  const shippingFee =
+    subtotal >= siteConfig.freeShippingThreshold || subtotal === 0
+      ? 0
+      : siteConfig.standardShippingFee;
   const totalAmount = subtotal + shippingFee;
 
-  const formatPrice = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
+  const formatPrice = (amount: number) =>
+    `₹${amount.toLocaleString('en-IN')}`;
 
   const validateForm = () => {
     const errors: Record<string, string> = {};
     if (!formData.fullName.trim()) errors.fullName = 'Full name is required';
-    if (!formData.mobileNumber.trim()) errors.mobileNumber = 'Mobile number is required';
-    else if (!/^[0-9]{10}$/.test(formData.mobileNumber.trim().replace(/\D/g, ''))) {
+    if (!formData.mobileNumber.trim())
+      errors.mobileNumber = 'Mobile number is required';
+    else if (!/^[0-9]{10}$/.test(formData.mobileNumber.trim().replace(/\D/g, '')))
       errors.mobileNumber = 'Enter a valid 10-digit number';
-    }
-    if (!formData.houseBuilding.trim()) errors.houseBuilding = 'House/Building info is required';
-    if (!formData.streetLocality.trim()) errors.streetLocality = 'Street/Locality is required';
+    if (!formData.houseBuilding.trim())
+      errors.houseBuilding = 'House/Building info is required';
+    if (!formData.streetLocality.trim())
+      errors.streetLocality = 'Street/Locality is required';
     if (!formData.city.trim()) errors.city = 'City is required';
     if (!formData.state.trim()) errors.state = 'State is required';
     if (!formData.pinCode.trim()) errors.pinCode = 'PIN Code is required';
-
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -92,37 +125,53 @@ export default function CheckoutClient() {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
-
     try {
       const data = await createOrder(formData, checkoutItems);
       setCreatedOrderId(data.orderId);
       setStep('success');
 
-      // Only open window in browser environment
       if (typeof window !== 'undefined' && data.whatsappUrl) {
         window.open(data.whatsappUrl, '_blank');
       }
 
-      // Clear cart only if it was a cart checkout (not Buy Now)
-      if (!buyNowProduct) {
+      // Only clear the cart when this was a cart checkout (not Buy Now)
+      if (!buyNowItems) {
         clearCart();
       }
     } catch (error) {
-      console.error('Order checkout error:', error);
-      // Only use alert in browser environment
+      console.error('Order error:', error);
       if (typeof window !== 'undefined') {
-        alert(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
+        alert(
+          error instanceof Error
+            ? error.message
+            : 'Failed to place order. Please try again.'
+        );
       }
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  // ── Loading state: show spinner while reading URL ──────────────────────────
+  if (!isReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#005E23] mx-auto" />
+          <p className="mt-4 text-sm text-gray-600">Loading checkout...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Empty state ────────────────────────────────────────────────────────────
   if (checkoutItems.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">No items to checkout</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-2">
+            No items to checkout
+          </h2>
           <p className="text-gray-600 mb-4">Your cart is empty</p>
           <button
             onClick={() => router.push('/shop')}
@@ -135,6 +184,7 @@ export default function CheckoutClient() {
     );
   }
 
+  // ── Success screen ─────────────────────────────────────────────────────────
   if (step === 'success') {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
@@ -149,9 +199,9 @@ export default function CheckoutClient() {
             #{createdOrderId}
           </h3>
           <p className="mt-3 text-sm leading-relaxed text-[#555555]">
-            Your order details have been registered and forwarded to KLYRO WhatsApp Support for instant confirmation & dispatch.
+            Your order details have been registered and forwarded to KLYRO
+            WhatsApp Support for instant confirmation &amp; dispatch.
           </p>
-
           <div className="mt-8 flex flex-col gap-3">
             <button
               onClick={() => router.push(`/track?query=${createdOrderId}`)}
@@ -171,6 +221,7 @@ export default function CheckoutClient() {
     );
   }
 
+  // ── Checkout form ──────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
@@ -188,11 +239,17 @@ export default function CheckoutClient() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6">
-          {/* Left: Form */}
+          {/* Left: Address form */}
           <div>
-            <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 shadow-sm space-y-4">
-              <h2 className="text-lg font-bold text-gray-900">Delivery Address</h2>
-              
+            <form
+              onSubmit={handleSubmit}
+              className="bg-white rounded-2xl p-6 shadow-sm space-y-4"
+            >
+              <h2 className="text-lg font-bold text-gray-900">
+                Delivery Address
+              </h2>
+
+              {/* Full Name */}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-1">
                   Full Name *
@@ -201,13 +258,20 @@ export default function CheckoutClient() {
                   type="text"
                   required
                   value={formData.fullName}
-                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, fullName: e.target.value })
+                  }
                   placeholder="Your full name"
                   className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#005E23] focus:outline-none"
                 />
-                {formErrors.fullName && <p className="mt-1 text-xs text-red-600">{formErrors.fullName}</p>}
+                {formErrors.fullName && (
+                  <p className="mt-1 text-xs text-red-600">
+                    {formErrors.fullName}
+                  </p>
+                )}
               </div>
 
+              {/* Mobile + Email */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-1">
@@ -217,11 +281,20 @@ export default function CheckoutClient() {
                     type="tel"
                     required
                     value={formData.mobileNumber}
-                    onChange={(e) => setFormData({ ...formData, mobileNumber: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        mobileNumber: e.target.value,
+                      })
+                    }
                     placeholder="10-digit number"
                     className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#005E23] focus:outline-none"
                   />
-                  {formErrors.mobileNumber && <p className="mt-1 text-xs text-red-600">{formErrors.mobileNumber}</p>}
+                  {formErrors.mobileNumber && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {formErrors.mobileNumber}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-1">
@@ -230,13 +303,16 @@ export default function CheckoutClient() {
                   <input
                     type="email"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
                     placeholder="email@example.com"
                     className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#005E23] focus:outline-none"
                   />
                 </div>
               </div>
 
+              {/* House / Building */}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-1">
                   House / Flat / Building *
@@ -245,13 +321,23 @@ export default function CheckoutClient() {
                   type="text"
                   required
                   value={formData.houseBuilding}
-                  onChange={(e) => setFormData({ ...formData, houseBuilding: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      houseBuilding: e.target.value,
+                    })
+                  }
                   placeholder="Flat 402, Green Heights"
                   className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#005E23] focus:outline-none"
                 />
-                {formErrors.houseBuilding && <p className="mt-1 text-xs text-red-600">{formErrors.houseBuilding}</p>}
+                {formErrors.houseBuilding && (
+                  <p className="mt-1 text-xs text-red-600">
+                    {formErrors.houseBuilding}
+                  </p>
+                )}
               </div>
 
+              {/* Street */}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-1">
                   Street / Area / Locality *
@@ -260,13 +346,23 @@ export default function CheckoutClient() {
                   type="text"
                   required
                   value={formData.streetLocality}
-                  onChange={(e) => setFormData({ ...formData, streetLocality: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      streetLocality: e.target.value,
+                    })
+                  }
                   placeholder="12th Main Road, Indiranagar"
                   className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#005E23] focus:outline-none"
                 />
-                {formErrors.streetLocality && <p className="mt-1 text-xs text-red-600">{formErrors.streetLocality}</p>}
+                {formErrors.streetLocality && (
+                  <p className="mt-1 text-xs text-red-600">
+                    {formErrors.streetLocality}
+                  </p>
+                )}
               </div>
 
+              {/* City + State */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-1">
@@ -276,11 +372,17 @@ export default function CheckoutClient() {
                     type="text"
                     required
                     value={formData.city}
-                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, city: e.target.value })
+                    }
                     placeholder="Bangalore"
                     className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#005E23] focus:outline-none"
                   />
-                  {formErrors.city && <p className="mt-1 text-xs text-red-600">{formErrors.city}</p>}
+                  {formErrors.city && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {formErrors.city}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-1">
@@ -290,14 +392,21 @@ export default function CheckoutClient() {
                     type="text"
                     required
                     value={formData.state}
-                    onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, state: e.target.value })
+                    }
                     placeholder="Karnataka"
                     className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#005E23] focus:outline-none"
                   />
-                  {formErrors.state && <p className="mt-1 text-xs text-red-600">{formErrors.state}</p>}
+                  {formErrors.state && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {formErrors.state}
+                    </p>
+                  )}
                 </div>
               </div>
 
+              {/* PIN Code */}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-1">
                   PIN Code *
@@ -306,13 +415,20 @@ export default function CheckoutClient() {
                   type="text"
                   required
                   value={formData.pinCode}
-                  onChange={(e) => setFormData({ ...formData, pinCode: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, pinCode: e.target.value })
+                  }
                   placeholder="560038"
                   className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#005E23] focus:outline-none"
                 />
-                {formErrors.pinCode && <p className="mt-1 text-xs text-red-600">{formErrors.pinCode}</p>}
+                {formErrors.pinCode && (
+                  <p className="mt-1 text-xs text-red-600">
+                    {formErrors.pinCode}
+                  </p>
+                )}
               </div>
 
+              {/* Landmark */}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-1">
                   Landmark (Optional)
@@ -320,19 +436,24 @@ export default function CheckoutClient() {
                 <input
                   type="text"
                   value={formData.landmark}
-                  onChange={(e) => setFormData({ ...formData, landmark: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, landmark: e.target.value })
+                  }
                   placeholder="Near Metro Station"
                   className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#005E23] focus:outline-none"
                 />
               </div>
 
+              {/* Order Notes */}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-1">
                   Order Notes (Optional)
                 </label>
                 <textarea
                   value={formData.orderNotes}
-                  onChange={(e) => setFormData({ ...formData, orderNotes: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, orderNotes: e.target.value })
+                  }
                   placeholder="Any special instructions"
                   rows={3}
                   className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#005E23] focus:outline-none resize-none"
@@ -357,8 +478,10 @@ export default function CheckoutClient() {
           {/* Right: Order Summary */}
           <div>
             <div className="bg-white rounded-2xl p-6 shadow-sm sticky top-8">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h2>
-              
+              <h2 className="text-lg font-bold text-gray-900 mb-4">
+                Order Summary
+              </h2>
+
               <div className="space-y-3 mb-4">
                 {checkoutItems.map((item, idx) => (
                   <div key={idx} className="flex gap-3">
@@ -375,10 +498,14 @@ export default function CheckoutClient() {
                         {item.product.name}
                       </h3>
                       {item.selectedVariant && (
-                        <p className="text-xs text-gray-600">Variant: {item.selectedVariant}</p>
+                        <p className="text-xs text-gray-600">
+                          Variant: {item.selectedVariant}
+                        </p>
                       )}
                       <div className="flex items-center justify-between mt-1">
-                        <span className="text-xs text-gray-600">Qty: {item.quantity}</span>
+                        <span className="text-xs text-gray-600">
+                          Qty: {item.quantity}
+                        </span>
                         <span className="text-sm font-bold text-gray-900">
                           {formatPrice(item.product.price * item.quantity)}
                         </span>
@@ -391,7 +518,9 @@ export default function CheckoutClient() {
               <div className="border-t border-gray-200 pt-4 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="font-semibold text-gray-900">{formatPrice(subtotal)}</span>
+                  <span className="font-semibold text-gray-900">
+                    {formatPrice(subtotal)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Shipping</span>
@@ -405,7 +534,9 @@ export default function CheckoutClient() {
                 </div>
                 <div className="flex justify-between text-base font-bold text-gray-900 pt-2 border-t border-gray-200">
                   <span>Total</span>
-                  <span className="text-[#005E23]">{formatPrice(totalAmount)}</span>
+                  <span className="text-[#005E23]">
+                    {formatPrice(totalAmount)}
+                  </span>
                 </div>
               </div>
             </div>
