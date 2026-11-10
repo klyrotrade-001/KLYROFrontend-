@@ -71,7 +71,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     product: Product,
     quantity: number = 1,
     selectedVariant?: string,
-    openDrawer: boolean = true
+    openDrawer: boolean = false
   ): { success: boolean; message: string } => {
     // Validation
     if (!product || !product.id) {
