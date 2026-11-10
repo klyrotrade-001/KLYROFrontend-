@@ -31,19 +31,16 @@ export default function ProductCard({ product, priorityImage = false }: ProductC
   };
 
   const handleBuyNow = () => {
-    // Direct checkout - do NOT add to cart, do NOT open drawer
-    // Send only minimal data to avoid URL length issues on mobile
+    // Direct checkout - send only ID/slug to avoid URL length issues
     console.log('BUY NOW CLICKED - Going to checkout page');
     const minimalData = {
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.images[0],
+      productId: product.id,
+      slug: product.slug,
       quantity: 1,
       variant: product.variants?.[0]?.options[0]
     };
     const encodedData = encodeURIComponent(JSON.stringify(minimalData));
-    console.log('Navigating to:', `/checkout?buyNow=${encodedData.substring(0, 50)}...`);
+    console.log('Navigating to:', `/checkout?buyNow=${encodedData}`);
     router.push(`/checkout?buyNow=${encodedData}`);
   };
 

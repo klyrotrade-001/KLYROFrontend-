@@ -64,6 +64,11 @@ export async function getProducts(options: {
   return result.products;
 }
 
+export async function getProduct(idOrSlug: string): Promise<Product> {
+  const result = await requestApi<{ product: Product }>(`/products/${idOrSlug}`);
+  return result.product;
+}
+
 export async function getCategories(): Promise<CategoryInfo[]> {
   const result = await requestApi<{ categories: CategoryInfo[] }>('/categories');
   return result.categories;

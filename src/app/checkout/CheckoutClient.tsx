@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ShieldCheck, ArrowLeft, Check } from 'lucide-react';
 import { useCart } from '@/src/context/CartContext';
 import { CartItem, CustomerDetails } from '@/src/types';
-import { createOrder } from '@/src/lib/api';
+import { createOrder, getProduct } from '@/src/lib/api';
 import { siteConfig } from '@/src/data/products';
 import ProductImage from '@/src/components/product/ProductImage';
 
@@ -40,50 +40,41 @@ export default function CheckoutClient() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const raw = params.get('buyNow');
+    const loadBuyNowProduct = async () => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const raw = params.get('buyNow');
 
-      if (raw) {
-        const decoded = JSON.parse(decodeURIComponent(raw));
+        if (raw) {
+          const decoded = JSON.parse(decodeURIComponent(raw));
+          
+          // Fetch the full product data by ID or slug
+          const productId = decoded.productId || decoded.slug || decoded.id;
+          if (!productId) {
+            console.error('No product ID found in buyNow param');
+            setIsReady(true);
+            return;
+          }
 
-        // Build a CartItem-compatible object from the minimal encoded data.
-        // ProductCard / ProductDetailModal both send:
-        // { id, name, price, image, quantity, variant }
-        const cartItem: CartItem = {
-          quantity: decoded.quantity || 1,
-          selectedVariant: decoded.variant,
-          product: {
-            // Required Product fields – fill from decoded data
-            id: decoded.id ?? '',
-            slug: decoded.slug ?? decoded.id ?? '',
-            name: decoded.name ?? 'Product',
-            category: decoded.category ?? 'Mini Electronics',
-            categorySlug: decoded.categorySlug ?? '',
-            price: decoded.price ?? 0,
-            originalPrice: decoded.originalPrice ?? decoded.price ?? 0,
-            discount: decoded.discount ?? 0,
-            description: decoded.description ?? '',
-            features: decoded.features ?? [],
-            // Support both `images` array and single `image` string
-            images: decoded.images?.length
-              ? decoded.images
-              : decoded.image
-              ? [decoded.image]
-              : ['/placeholder.png'],
-            inStock: true,
-            rating: decoded.rating ?? 5,
-            reviewsCount: decoded.reviewsCount ?? 0,
-          },
-        };
+          const product = await getProduct(productId);
+          
+          // Build a CartItem with the fetched product
+          const cartItem: CartItem = {
+            quantity: decoded.quantity || 1,
+            selectedVariant: decoded.variant,
+            product,
+          };
 
-        setBuyNowItems([cartItem]);
+          setBuyNowItems([cartItem]);
+        }
+      } catch (err) {
+        console.error('Failed to load buyNow product:', err);
+      } finally {
+        setIsReady(true);
       }
-    } catch (err) {
-      console.error('Failed to parse buyNow param:', err);
-    }
+    };
 
-    setIsReady(true);
+    loadBuyNowProduct();
   }, []);
 
   // Determine which items to show at checkout

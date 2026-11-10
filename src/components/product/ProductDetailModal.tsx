@@ -186,18 +186,16 @@ export default function ProductDetailModal() {
               <button
                 type="button"
                 onClick={() => {
-                  // Direct checkout - Send minimal data to avoid URL length issues
+                  // Direct checkout - send only ID/slug to avoid URL length issues
                   console.log('BUY NOW CLICKED (Modal) - Going to checkout page');
                   const minimalData = {
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    image: product.images[0],
+                    productId: product.id,
+                    slug: product.slug,
                     quantity,
                     variant: currentVariant
                   };
                   const encodedData = encodeURIComponent(JSON.stringify(minimalData));
-                  console.log('Navigating to:', `/checkout?buyNow=${encodedData.substring(0, 50)}...`);
+                  console.log('Navigating to:', `/checkout?buyNow=${encodedData}`);
                   router.push(`/checkout?buyNow=${encodedData}`);
                 }}
                 className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#005E23] bg-[#005E23] py-2.5 px-2 text-[11px] sm:text-xs font-bold text-white shadow-sm transition-all hover:bg-[#004719] hover:border-[#004719] active:scale-95"

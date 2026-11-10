@@ -110,9 +110,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     setIsLoading(true);
     try {
-      setCart((prev) => {
+      setCart((prev: CartItem[]) => {
         const existingIndex = prev.findIndex(
-          (item) => item.product.id === product.id && item.selectedVariant === selectedVariant
+          (item: CartItem) => item.product.id === product.id && item.selectedVariant === selectedVariant
         );
         
         if (existingIndex > -1) {
@@ -144,9 +144,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [cart]);
 
   const removeFromCart = (productId: string, selectedVariant?: string) => {
-    setCart((prev) =>
+    setCart((prev: CartItem[]) =>
       prev.filter(
-        (item) => !(item.product.id === productId && item.selectedVariant === selectedVariant)
+        (item: CartItem) => !(item.product.id === productId && item.selectedVariant === selectedVariant)
       )
     );
   };
@@ -184,8 +184,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return { success: false, message: 'This item is out of stock' };
     }
 
-    setCart((prev) =>
-      prev.map((item) =>
+    setCart((prev: CartItem[]) =>
+      prev.map((item: CartItem) =>
         item.product.id === productId && item.selectedVariant === selectedVariant
           ? { ...item, quantity }
           : item
@@ -199,8 +199,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setCart([]);
   };
 
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const totalItems = cart.reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
+  const subtotal = cart.reduce((sum: number, item: CartItem) => sum + item.product.price * item.quantity, 0);
   const shippingFee = subtotal >= siteConfig.freeShippingThreshold || subtotal === 0 ? 0 : siteConfig.standardShippingFee;
   const totalAmount = subtotal + shippingFee;
 
@@ -244,7 +244,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
 
     lines.push("", "*Order Summary*");
-    cart.forEach((item, index) => {
+    cart.forEach((item: CartItem, index: number) => {
       const lineTotal = item.product.price * item.quantity;
       const variantText = item.selectedVariant ? ` [${item.selectedVariant}]` : '';
       lines.push(

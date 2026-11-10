@@ -105,7 +105,8 @@ export default function ProductDetailPage() {
   };
 
   const handleBuyNow = () => {
-    addToCart(product, quantity, currentVariant, true);
+    const url = generateSingleProductWhatsAppUrl(product, quantity, currentVariant);
+    window.open(url, '_blank');
   };
 
   const handleWhatsAppOrder = () => {
