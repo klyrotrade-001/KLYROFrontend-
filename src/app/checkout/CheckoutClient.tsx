@@ -1,7 +1,5 @@
 'use client';
 
-'use client';
-
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
@@ -40,6 +38,9 @@ export default function CheckoutClient() {
 
   // Check if this is a "Buy Now" direct purchase
   useEffect(() => {
+    // Guard against SSR and ensure searchParams is available
+    if (!searchParams) return;
+    
     const productData = searchParams.get('product');
     if (productData) {
       try {
@@ -97,7 +98,8 @@ export default function CheckoutClient() {
       setCreatedOrderId(data.orderId);
       setStep('success');
 
-      if (data.whatsappUrl) {
+      // Only open window in browser environment
+      if (typeof window !== 'undefined' && data.whatsappUrl) {
         window.open(data.whatsappUrl, '_blank');
       }
 
@@ -107,7 +109,10 @@ export default function CheckoutClient() {
       }
     } catch (error) {
       console.error('Order checkout error:', error);
-      alert(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
+      // Only use alert in browser environment
+      if (typeof window !== 'undefined') {
+        alert(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }

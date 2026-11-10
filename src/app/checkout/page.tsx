@@ -1,10 +1,6 @@
 import { Suspense } from 'react';
 import CheckoutClient from './CheckoutClient';
 
-// Force dynamic rendering to prevent prerender errors
-export const dynamic = 'force-dynamic';
-export const dynamicParams = true;
-
 export default function CheckoutPage() {
   return (
     <Suspense fallback={

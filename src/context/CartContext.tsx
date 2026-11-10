@@ -42,6 +42,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
   useEffect(() => {
+    // Only access localStorage in browser environment
+    if (typeof window === 'undefined') {
+      setIsLoaded(true);
+      return;
+    }
+    
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -58,6 +64,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
+    // Only access localStorage in browser environment
+    if (typeof window === 'undefined') return;
+    
     if (isLoaded) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
