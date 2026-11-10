@@ -55,24 +55,26 @@ function CheckoutPageContent() {
         // Handle minimal data format (new)
         if (data.id) {
           // Convert minimal format to full product format for checkout
-          setBuyNowProduct({
+          const productObj: Product = {
             id: data.id,
             name: data.name,
             price: data.price,
             originalPrice: data.price,
             images: [data.image],
             slug: data.id,
-            category: '',
+            category: 'General' as any,
+            categorySlug: 'general',
             description: data.name,
             rating: 0,
             reviewsCount: 0,
             inStock: true,
             discount: 0,
             features: [],
-            specifications: {},
             isBestSeller: false,
-            isNewArrival: false
-          } as Product);
+            isNewArrival: false,
+            variants: []
+          };
+          setBuyNowProduct(productObj);
           setBuyNowQuantity(data.quantity || 1);
           setBuyNowVariant(data.variant);
         } 
