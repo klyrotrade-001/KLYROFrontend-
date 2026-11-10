@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { ShieldCheck, ArrowLeft, Check } from 'lucide-react';
@@ -10,7 +10,10 @@ import { createOrder } from '@/src/lib/api';
 import { siteConfig } from '@/src/data/products';
 import ProductImage from '@/src/components/product/ProductImage';
 
-export default function CheckoutPage() {
+// Force dynamic rendering to avoid prerender errors with useSearchParams
+export const dynamic = 'force-dynamic';
+
+function CheckoutPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { cart, clearCart } = useCart();
@@ -406,5 +409,21 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#005E23] mx-auto"></div>
+          <p className="mt-4 text-sm text-gray-600">Loading checkout...</p>
+        </div>
+      </div>
+    }>
+      <CheckoutPageContent />
+    </Suspense>
   );
 }
