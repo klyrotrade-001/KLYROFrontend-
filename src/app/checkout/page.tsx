@@ -40,20 +40,53 @@ function CheckoutPageContent() {
 
   // Check if this is a "Buy Now" direct purchase
   useEffect(() => {
-    const productData = searchParams.get('product');
-    if (productData) {
+    const buyNowData = searchParams.get('buyNow');
+    const productData = searchParams.get('product'); // Legacy support
+    
+    const dataToparse = buyNowData || productData;
+    
+    if (dataToparse) {
       try {
-        const decoded = decodeURIComponent(productData);
-        console.log('Decoding product data:', decoded.substring(0, 100));
+        const decoded = decodeURIComponent(dataToparse);
+        console.log('Decoding data:', decoded.substring(0, 100));
         const data = JSON.parse(decoded);
-        console.log('Parsed product data:', data);
-        setBuyNowProduct(data.product);
-        setBuyNowQuantity(data.quantity || 1);
-        setBuyNowVariant(data.variant);
+        console.log('Parsed data:', data);
+        
+        // Handle minimal data format (new)
+        if (data.id) {
+          // Convert minimal format to full product format for checkout
+          setBuyNowProduct({
+            id: data.id,
+            name: data.name,
+            price: data.price,
+            originalPrice: data.price,
+            images: [data.image],
+            slug: data.id,
+            category: '',
+            description: data.name,
+            rating: 0,
+            reviewsCount: 0,
+            inStock: true,
+            discount: 0,
+            features: [],
+            specifications: {},
+            isBestSeller: false,
+            isNewArrival: false
+          } as Product);
+          setBuyNowQuantity(data.quantity || 1);
+          setBuyNowVariant(data.variant);
+        } 
+        // Handle old full product format (legacy)
+        else if (data.product) {
+          setBuyNowProduct(data.product);
+          setBuyNowQuantity(data.quantity || 1);
+          setBuyNowVariant(data.variant);
+        }
+        
         setParseError(false);
       } catch (error) {
-        console.error('Error parsing product data:', error);
-        console.error('Raw product data:', productData.substring(0, 200));
+        console.error('Error parsing data:', error);
+        console.error('Raw data:', dataToparse.substring(0, 200));
         setParseError(true);
       }
     }
