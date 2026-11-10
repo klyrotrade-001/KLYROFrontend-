@@ -25,10 +25,10 @@ export default function Navbar() {
           <Image
             src="/logo.png"
             alt="KLYRO"
-            width={140}
-            height={40}
+            width={120}
+            height={50}
             priority
-            className="h-auto w-28 sm:w-32 object-contain"
+            className="h-10 w-auto object-contain"
           />
         </Link>
 
