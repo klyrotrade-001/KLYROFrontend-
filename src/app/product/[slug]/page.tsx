@@ -10,7 +10,6 @@ import {
   ShieldCheck,
   Truck,
   RefreshCw,
-  MessageCircle,
   Check,
   Heart,
   Share2,
@@ -300,15 +299,7 @@ export default function ProductDetailPage() {
                 </button>
               </div>
 
-              {/* Direct WhatsApp Order */}
-              <button
-                type="button"
-                onClick={handleWhatsAppOrder}
-                className="mt-3 w-full rounded-full border border-[#25D366]/40 bg-[#25D366]/10 py-3 text-xs font-bold uppercase tracking-wider text-[#128C7E] hover:bg-[#25D366]/20 transition-all flex items-center justify-center gap-2"
-              >
-                <MessageCircle size={16} className="text-[#25D366]" />
-                <span>Order on WhatsApp directly</span>
-              </button>
+
 
               {/* Features List */}
               {product.features && product.features.length > 0 && (
