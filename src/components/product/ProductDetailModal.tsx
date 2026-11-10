@@ -191,6 +191,7 @@ export default function ProductDetailModal() {
               <button
                 type="button"
                 onClick={() => {
+                  // Direct checkout - do NOT add to cart, do NOT open drawer
                   const productData = {
                     product,
                     quantity,

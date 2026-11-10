@@ -32,6 +32,7 @@ export default function ProductCard({ product, priorityImage = false }: ProductC
   };
 
   const handleBuyNow = () => {
+    // Direct checkout - do NOT add to cart, do NOT open drawer
     const productData = {
       product,
       quantity: 1,
