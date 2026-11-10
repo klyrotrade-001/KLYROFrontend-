@@ -24,6 +24,8 @@ function CheckoutPageContent() {
   const [buyNowProduct, setBuyNowProduct] = useState<Product | null>(null);
   const [buyNowQuantity, setBuyNowQuantity] = useState(1);
   const [buyNowVariant, setBuyNowVariant] = useState<string>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [parseError, setParseError] = useState(false);
   
   const [formData, setFormData] = useState<CustomerDetails>({
     fullName: '',
@@ -44,14 +46,21 @@ function CheckoutPageContent() {
     const productData = searchParams.get('product');
     if (productData) {
       try {
-        const data = JSON.parse(decodeURIComponent(productData));
+        const decoded = decodeURIComponent(productData);
+        console.log('Decoding product data:', decoded.substring(0, 100));
+        const data = JSON.parse(decoded);
+        console.log('Parsed product data:', data);
         setBuyNowProduct(data.product);
         setBuyNowQuantity(data.quantity || 1);
         setBuyNowVariant(data.variant);
+        setParseError(false);
       } catch (error) {
         console.error('Error parsing product data:', error);
+        console.error('Raw product data:', productData.substring(0, 200));
+        setParseError(true);
       }
     }
+    setIsLoading(false);
   }, [searchParams]);
 
   // Determine items to checkout
@@ -113,6 +122,41 @@ function CheckoutPageContent() {
       setIsSubmitting(false);
     }
   };
+
+  // Show loading while parsing product data
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#005E23] mx-auto"></div>
+          <p className="mt-4 text-sm text-gray-600">Loading checkout...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if product data parsing failed
+  if (parseError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center max-w-md">
+          <div className="text-red-600 mb-4">
+            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Invalid Product Data</h2>
+          <p className="text-gray-600 mb-4">There was an error loading the product information. Please try again.</p>
+          <button
+            onClick={() => router.push('/shop')}
+            className="px-6 py-2 bg-[#005E23] text-white rounded-full hover:bg-[#004719]"
+          >
+            Back to Shop
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (checkoutItems.length === 0) {
     return (
