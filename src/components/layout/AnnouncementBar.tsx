@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MessageCircle, MapPin, ShieldCheck } from "lucide-react";
+import { MessageCircle, MapPin } from "lucide-react";
 import { siteConfig } from "@/src/data/products";
 
 export default function AnnouncementBar() {
@@ -41,17 +41,4 @@ export default function AnnouncementBar() {
             <MapPin size={12} />
             Track Order
           </Link>
-          <span className="hidden h-3 w-px bg-white/20 sm:inline-block" />
-          <Link
-            href="/admin"
-            className="flex items-center gap-1 font-semibold text-white/80 transition-colors hover:text-white"
-            title="Open Admin Portal"
-          >
-            <ShieldCheck size={12} className="text-[#4ade80]" />
-            <span>Admin</span>
-          </Link>
         </div>
-      </div>
-    </aside>
-  );
-}
