@@ -8,7 +8,6 @@ import { Product } from "@/src/types";
 import { useCart } from "@/src/context/CartContext";
 import { useToast } from "@/src/hooks/useToast";
 import AddToCartButton from "@/src/components/buttons/AddToCartButton";
-import BuyNowButton from "@/src/components/buttons/BuyNowButton";
 import ProductImage from "@/src/components/product/ProductImage";
 
 interface ProductCardProps {
@@ -131,7 +130,16 @@ export default function ProductCard({ product, priorityImage = false }: ProductC
       {/* CTA Buttons */}
       <div className="mt-3.5 grid grid-cols-2 gap-1.5 pt-1">
         <AddToCartButton onClick={handleAddToCart} size="md" />
-        <BuyNowButton onClick={handleBuyNow} size="md" />
+        <button
+          type="button"
+          onClick={handleBuyNow}
+          className="flex h-10 min-w-0 w-full items-center justify-center gap-1 overflow-hidden rounded-2xl border-2 border-[#005E23] bg-[#005E23] font-bold tracking-tight transition-all duration-200 active:scale-95 px-1 sm:px-2 text-white text-[11px] sm:text-xs"
+          style={{ 
+            boxShadow: 'inset 0 1px 0 0 #003D17, inset 0 -1px 0 0 #003D17, inset 1px 0 0 0 #003D17, inset -1px 0 0 0 #003D17'
+          }}
+        >
+          <span className="min-w-0 whitespace-nowrap text-center">Buy Now</span>
+        </button>
       </div>
     </div>
   );
