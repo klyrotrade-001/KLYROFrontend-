@@ -33,12 +33,14 @@ export default function ProductCard({ product, priorityImage = false }: ProductC
 
   const handleBuyNow = () => {
     // Direct checkout - do NOT add to cart, do NOT open drawer
+    console.log('BUY NOW CLICKED - Going to checkout page');
     const productData = {
       product,
       quantity: 1,
       variant: product.variants?.[0]?.options[0]
     };
     const encodedData = encodeURIComponent(JSON.stringify(productData));
+    console.log('Navigating to:', `/checkout?product=${encodedData.substring(0, 50)}...`);
     router.push(`/checkout?product=${encodedData}`);
   };
 

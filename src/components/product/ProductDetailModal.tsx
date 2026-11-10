@@ -192,12 +192,14 @@ export default function ProductDetailModal() {
                 type="button"
                 onClick={() => {
                   // Direct checkout - do NOT add to cart, do NOT open drawer
+                  console.log('BUY NOW CLICKED (Modal) - Going to checkout page');
                   const productData = {
                     product,
                     quantity,
                     variant: currentVariant
                   };
                   const encodedData = encodeURIComponent(JSON.stringify(productData));
+                  console.log('Navigating to:', `/checkout?product=${encodedData.substring(0, 50)}...`);
                   router.push(`/checkout?product=${encodedData}`);
                 }}
                 className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#005E23] bg-[#005E23] py-2.5 px-2 text-[11px] sm:text-xs font-bold text-white shadow-sm transition-all hover:bg-[#004719] hover:border-[#004719] active:scale-95"
