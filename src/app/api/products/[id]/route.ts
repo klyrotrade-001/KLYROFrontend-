@@ -4,10 +4,10 @@ const BACKEND = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001').rep
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const res = await fetch(`${BACKEND}/api/products/${id}`, { cache: 'no-store' });
     const data = await res.json();
     return NextResponse.json(data, { status: res.status });
@@ -18,10 +18,10 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await req.json();
     const res = await fetch(`${BACKEND}/api/products/${id}`, {
       method: 'PATCH',
@@ -37,10 +37,10 @@ export async function PATCH(
 
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const res = await fetch(`${BACKEND}/api/products/${id}`, { method: 'DELETE' });
     const data = await res.json();
     return NextResponse.json(data, { status: res.status });
