@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 import { getProducts } from "@/src/lib/api";
 import { Product } from "@/src/types";
+import ProductImage from "@/src/components/product/ProductImage";
 
 export default function FeaturedCollectionSection() {
   const [featured, setFeatured] = useState<Product[]>([]);
@@ -94,12 +95,12 @@ export default function FeaturedCollectionSection() {
                     className="group relative block aspect-[3/4] sm:aspect-[4/5] w-full overflow-hidden rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-md transition-all duration-300 hover:shadow-xl"
                   >
                     <div className="relative h-full w-full overflow-hidden rounded-xl bg-[#F7F8F6]">
-                      <Image
+                      <ProductImage
                         src={blender.images[0]}
                         alt={blender.name}
                         fill
                         sizes="(max-width: 640px) 100vw, 40vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-106"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute bottom-3 left-3 right-3 rounded-xl bg-white/90 p-3 shadow-md backdrop-blur-md">
                         <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[#005E23]">
@@ -126,12 +127,12 @@ export default function FeaturedCollectionSection() {
                       className="group relative block overflow-hidden rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-sm transition-all duration-300 hover:shadow-md"
                     >
                       <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-[#F7F8F6]">
-                        <Image
+                        <ProductImage
                           src={chopper.images[0]}
                           alt={chopper.name}
                           fill
                           sizes="280px"
-                          className="object-cover transition-transform duration-500 group-hover:scale-106"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>
                       <div className="mt-2.5 flex items-center justify-between">
@@ -152,12 +153,12 @@ export default function FeaturedCollectionSection() {
                       className="group relative block overflow-hidden rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-sm transition-all duration-300 hover:shadow-md"
                     >
                       <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-[#F7F8F6]">
-                        <Image
+                        <ProductImage
                           src={oilSprayer.images[0]}
                           alt={oilSprayer.name}
                           fill
                           sizes="280px"
-                          className="object-cover transition-transform duration-500 group-hover:scale-106"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>
                       <div className="mt-2.5 flex items-center justify-between">

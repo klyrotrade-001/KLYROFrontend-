@@ -8,6 +8,7 @@ import { useCart } from "@/src/context/CartContext";
 import { siteConfig } from "@/src/data/products";
 import { CustomerDetails } from "@/src/types";
 import { createOrder } from "@/src/lib/api";
+import ProductImage from "@/src/components/product/ProductImage";
 
 export default function CartDrawer() {
   const {
@@ -210,7 +211,7 @@ export default function CartDrawer() {
                 {cart.map((item, idx) => (
                   <div key={`${item.product.id}-${item.selectedVariant || idx}`} className="flex gap-4 py-4">
                     <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#E8ECE6] bg-[#F7F8F6]">
-                      <Image
+                      <ProductImage
                         src={item.product.images[0]}
                         alt={item.product.name}
                         fill

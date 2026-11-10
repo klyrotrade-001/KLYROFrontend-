@@ -1,6 +1,5 @@
 'use client';
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Heart, Star } from "lucide-react";
@@ -8,6 +7,7 @@ import { Product } from "@/src/types";
 import { useCart } from "@/src/context/CartContext";
 import AddToCartButton from "@/src/components/buttons/AddToCartButton";
 import BuyNowButton from "@/src/components/buttons/BuyNowButton";
+import ProductImage from "@/src/components/product/ProductImage";
 
 interface ProductCardProps {
   product: Product;
@@ -67,7 +67,7 @@ export default function ProductCard({ product, priorityImage = false }: ProductC
           </div>
 
           <Link href={`/product/${product.slug}`} className="relative block h-full w-full">
-            <Image
+            <ProductImage
               src={product.images[0]}
               alt={product.name}
               fill

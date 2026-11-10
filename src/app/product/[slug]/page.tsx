@@ -21,6 +21,7 @@ import { getProducts } from '@/src/lib/api';
 import { Product } from '@/src/types';
 import ProductCard from '@/src/components/product/ProductCard';
 import ReviewSection from '@/src/components/product/ReviewSection';
+import ProductImage from '@/src/components/product/ProductImage';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -135,7 +136,7 @@ export default function ProductDetailPage() {
           {/* Left: Gallery (6 cols) */}
           <div className="lg:col-span-6 flex flex-col gap-3 sm:gap-4">
             <div className="relative aspect-square w-full overflow-hidden rounded-2xl sm:rounded-3xl bg-white border border-[#E8ECE6] shadow-sm">
-              <Image
+              <ProductImage
                 src={currentImage}
                 alt={product.name}
                 fill
@@ -163,7 +164,7 @@ export default function ProductDetailPage() {
                         : 'border-[#E8ECE6] opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <Image src={img} alt="" fill className="object-cover object-center" />
+                    <ProductImage src={img} alt="" fill className="object-cover object-center" />
                   </button>
                 ))}
               </div>
