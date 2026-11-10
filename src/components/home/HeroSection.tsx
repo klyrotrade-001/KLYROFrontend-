@@ -98,7 +98,7 @@ export default function HeroSection() {
             </div>
 
             {/* Floating Card 1 — bottom-left, smaller on mobile */}
-            <div className="absolute bottom-0 left-0 sm:-bottom-2 sm:-left-2 z-20 w-36 sm:w-52 rounded-xl sm:rounded-2xl border border-[#E8ECE6] bg-white p-2 sm:p-3 shadow-[0_12px_32px_rgba(0,0,0,0.12)] transition-transform duration-300 hover:-translate-y-1">
+            <div className="absolute bottom-0 left-0 sm:-bottom-2 sm:-left-2 z-10 w-36 sm:w-52 rounded-xl sm:rounded-2xl border border-[#E8ECE6] bg-white p-2 sm:p-3 shadow-[0_12px_32px_rgba(0,0,0,0.12)] transition-transform duration-300 hover:-translate-y-1">
               <div className="relative aspect-video w-full overflow-hidden rounded-lg sm:rounded-xl bg-[#F7F8F6]">
                 <Image
                   src="https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=600&q=85"
@@ -119,7 +119,7 @@ export default function HeroSection() {
             </div>
 
             {/* Floating Card 2 — hidden on mobile, shown sm+ */}
-            <div className="hidden sm:block absolute -top-2 -right-2 z-20 w-48 rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-[0_16px_36px_rgba(0,0,0,0.1)] transition-transform duration-300 hover:-translate-y-1">
+            <div className="hidden sm:block absolute -top-2 -right-2 z-10 w-48 rounded-2xl border border-[#E8ECE6] bg-white p-3 shadow-[0_16px_36px_rgba(0,0,0,0.1)] transition-transform duration-300 hover:-translate-y-1">
               <div className="flex items-center gap-3">
                 <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-[#F7F8F6]">
                   <Image

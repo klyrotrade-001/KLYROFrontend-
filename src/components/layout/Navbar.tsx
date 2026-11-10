@@ -19,7 +19,7 @@ export default function Navbar() {
   const categories = useStoreCategories();
 
   return (
-    <nav className="sticky top-0 z-20 border-b border-black/10 bg-[#fbfaf8]/95 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 border-b border-black/10 bg-[#fbfaf8]/95 backdrop-blur-md">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-5 lg:grid lg:grid-cols-[1fr_auto_auto] lg:px-8">
         <Link href="/" className="shrink-0" aria-label="KLYRO home">
           <Image
