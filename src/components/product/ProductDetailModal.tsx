@@ -4,14 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { X, MessageCircle, Star, ShieldCheck, Truck, Check } from "lucide-react";
+import { X, Star, ShieldCheck, Truck, Check } from "lucide-react";
 import { useCart } from "@/src/context/CartContext";
 import AddToCartButton from "@/src/components/buttons/AddToCartButton";
 import BuyNowButton from "@/src/components/buttons/BuyNowButton";
 
 export default function ProductDetailModal() {
   const router = useRouter();
-  const { quickViewProduct, closeQuickView, addToCart, generateSingleProductWhatsAppUrl } = useCart();
+  const { quickViewProduct, closeQuickView, addToCart } = useCart();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
@@ -26,11 +26,6 @@ export default function ProductDetailModal() {
     setTimeout(() => {
       closeQuickView();
     }, 1500);
-  };
-
-  const handleWhatsAppOrder = () => {
-    const url = generateSingleProductWhatsAppUrl(product, quantity, currentVariant);
-    window.open(url, "_blank");
   };
 
   const formatPrice = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
@@ -207,15 +202,6 @@ export default function ProductDetailModal() {
                 <span className="truncate">Buy Now</span>
               </button>
             </div>
-
-            <button
-              type="button"
-              onClick={handleWhatsAppOrder}
-              className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-[#E8ECE6] py-2.5 px-2 text-[11px] sm:text-xs font-semibold text-[#151515] hover:bg-[#F7F8F6] transition-all active:scale-95"
-            >
-              <MessageCircle size={15} className="text-[#25D366]" />
-              <span className="truncate">Quick Order via WhatsApp</span>
-            </button>
 
             <div className="flex items-center justify-center gap-6 text-[10px] font-semibold text-[#777777] pt-2">
               <span className="flex items-center gap-1">
