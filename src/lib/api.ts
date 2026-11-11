@@ -1,7 +1,8 @@
 import { CartItem, CategoryInfo, CustomerDetails, Product } from '@/src/types';
 
+// Always call backend directly — works regardless of which Next.js build is deployed
 const API_BASE_URL = (
-  process.env.NEXT_PUBLIC_API_URL || '/api'
+  process.env.NEXT_PUBLIC_API_URL || 'https://klyroback.onrender.com/api'
 ).replace(/\/+$/, '');
 
 type ApiResponse<T extends object> = {
