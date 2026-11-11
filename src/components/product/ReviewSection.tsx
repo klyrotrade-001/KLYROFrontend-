@@ -59,8 +59,16 @@ export default function ReviewSection({ productSlug, productId, productName }: P
   useEffect(() => {
     fetch(`/api/reviews?slug=${productSlug}`)
       .then((r) => r.json())
-      .then((d) => { if (d.success) setReviews(d.reviews); })
-      .catch(() => {})
+      .then((d) => { 
+        if (d.success) {
+          setReviews(d.reviews);
+        } else {
+          console.error('Failed to fetch reviews:', d.error);
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching reviews:', err);
+      })
       .finally(() => setLoading(false));
   }, [productSlug]);
 
@@ -83,15 +91,21 @@ export default function ReviewSection({ productSlug, productId, productName }: P
         body: JSON.stringify({ productId, productSlug, productName, customerName: name, rating, comment }),
       });
       const data = await res.json();
+      console.log('Review submission response:', data); // Debug log
       if (data.success) {
         setStatus('success');
         setMessage(data.message);
         setName(''); setRating(0); setComment('');
+        // Refresh reviews list
+        fetch(`/api/reviews?slug=${productSlug}`)
+          .then((r) => r.json())
+          .then((d) => { if (d.success) setReviews(d.reviews); });
       } else {
         setStatus('error');
         setMessage(data.error || 'Failed to submit review.');
       }
-    } catch {
+    } catch (err) {
+      console.error('Error submitting review:', err);
       setStatus('error');
       setMessage('Something went wrong. Please try again.');
     } finally {
