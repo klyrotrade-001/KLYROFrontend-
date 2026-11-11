@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const BACKEND = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001').replace(/\/+$/, '');
+const BACKEND = (process.env.NEXT_PUBLIC_API_URL || 'https://klyroback.onrender.com').replace(/\/+$/, '');
 
 export async function POST(req: NextRequest) {
   try {

@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'https://klyroback.onrender.com';
 
 const nextConfig = {
   typescript: {
