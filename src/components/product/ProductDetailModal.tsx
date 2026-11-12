@@ -209,7 +209,7 @@ export default function ProductDetailModal() {
                 <Truck size={12} className="text-[#005E23]" /> Free Shipping &gt; ₹499
               </span>
               <span className="flex items-center gap-1">
-                <ShieldCheck size={12} className="text-[#005E23]" /> 7-Day Easy Replacement
+                <ShieldCheck size={12} className="text-[#005E23]" /> 3-Day Easy Replacement
               </span>
             </div>
           </div>

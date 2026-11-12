@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     q: 'What is your return and replacement policy?',
-    a: 'We offer a 7-day replacement policy for all products. If you receive a defective or damaged item, contact us within 7 days of delivery.',
+    a: 'We offer a 3-day replacement policy for all products. If you receive a defective or damaged item, contact us within 3 days of delivery.',
   },
   {
     q: 'How do I track my order?',

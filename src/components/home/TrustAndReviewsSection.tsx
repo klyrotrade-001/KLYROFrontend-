@@ -35,7 +35,7 @@ const trustBadges = [
   },
   {
     icon: RefreshCw,
-    title: "7-Day Easy Replacement",
+    title: "3-Day Easy Replacement",
     subtitle: "Hassle-free support for transit damage",
   },
   {

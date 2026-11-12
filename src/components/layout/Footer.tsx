@@ -126,7 +126,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="#replacements" className="transition-colors hover:text-white">
-                  7-Day Replacements
+                  3-Day Replacements
                 </Link>
               </li>
             </ul>

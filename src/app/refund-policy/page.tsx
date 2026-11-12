@@ -7,8 +7,8 @@ export default function RefundPolicyPage() {
 
         <div className="space-y-8 text-[#444444]">
           <section className="rounded-2xl bg-[#ecfdf5] border border-[#a7f3d0] p-5">
-            <p className="text-sm font-bold text-[#005E23]">🛡️ 7-Day Replacement Guarantee</p>
-            <p className="text-sm text-[#005E23] mt-1">We offer a hassle-free 7-day replacement for defective or damaged products.</p>
+            <p className="text-sm font-bold text-[#005E23]">🛡️ 3-Day Replacement Guarantee</p>
+            <p className="text-sm text-[#005E23] mt-1">We offer a hassle-free 3-day replacement for defective or damaged products.</p>
           </section>
 
           <section>
@@ -24,7 +24,7 @@ export default function RefundPolicyPage() {
             <h2 className="text-base font-black text-[#151515] mb-2">Not Eligible for Return</h2>
             <ul className="text-sm leading-relaxed space-y-1 list-disc list-inside">
               <li>Products damaged due to misuse</li>
-              <li>Items returned after 7 days of delivery</li>
+              <li>Items returned after 3 days of delivery</li>
               <li>Products without original packaging</li>
             </ul>
           </section>
@@ -36,7 +36,7 @@ export default function RefundPolicyPage() {
 
           <section>
             <h2 className="text-base font-black text-[#151515] mb-2">How to Request a Return</h2>
-            <p className="text-sm leading-relaxed">Contact us within 7 days of delivery via WhatsApp at <a href="https://wa.me/918089030066" className="text-[#005E23] font-semibold">+91 80890 30066</a> with your order ID and photos of the issue.</p>
+            <p className="text-sm leading-relaxed">Contact us within 3 days of delivery via WhatsApp at <a href="https://wa.me/918089030066" className="text-[#005E23] font-semibold">+91 80890 30066</a> with your order ID and photos of the issue.</p>
           </section>
         </div>
       </div>
