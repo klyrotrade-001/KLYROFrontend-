@@ -49,9 +49,9 @@ export default function Footer() {
               <Image
                 src="/image.png"
                 alt="KLYRO"
-                width={140}
-                height={56}
-                className="h-14 w-auto object-contain brightness-0 invert"
+                width={180}
+                height={72}
+                className="h-20 w-auto object-contain brightness-0 invert"
               />
             </Link>
 
