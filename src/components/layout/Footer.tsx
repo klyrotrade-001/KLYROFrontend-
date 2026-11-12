@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { MessageCircle, ArrowRight, Mail } from "lucide-react";
 import { siteConfig } from "@/src/data/products";
 import { subscribeToNewsletter } from "@/src/lib/api";
@@ -44,11 +45,14 @@ export default function Footer() {
           
           {/* Brand Info (4 cols) */}
           <div className="lg:col-span-4">
-            <Link href="/" className="flex items-center gap-1.5" aria-label="KLYRO home">
-              <span className="text-2xl font-black tracking-[-0.04em] text-white">
-                KLYRO
-              </span>
-              <span className="inline-block h-2 w-2 rounded-full bg-[#005E23]" />
+            <Link href="/" className="flex items-center" aria-label="KLYRO home">
+              <Image
+                src="/logo.png"
+                alt="KLYRO"
+                width={120}
+                height={50}
+                className="h-10 w-auto object-contain brightness-0 invert"
+              />
             </Link>
 
             <p className="mt-3 text-xs font-semibold tracking-wider text-[#4ade80] uppercase">
