@@ -21,7 +21,8 @@ async function requestApi<T extends object>(
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers,
-    next: { revalidate: 60 },
+    next: { revalidate: 300 }, // Cache for 5 minutes instead of 1 minute
+    cache: 'force-cache',
   });
 
   let payload: unknown;

@@ -32,13 +32,12 @@ function ShopContent() {
     setSortBy(sortParam);
   }, [sortParam]);
 
+  // Load all products once on mount
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
 
-    getProducts({
-      category: selectedCategory !== 'all' ? selectedCategory : undefined,
-    })
+    getProducts()
       .then((data) => {
         if (isMounted) {
           setProducts(Array.isArray(data) ? data : []);
@@ -56,7 +55,7 @@ function ShopContent() {
     return () => {
       isMounted = false;
     };
-  }, [selectedCategory]);
+  }, []); // Only load once
 
   const handleCategoryChange = (slug: string) => {
     setSelectedCategory(slug);
