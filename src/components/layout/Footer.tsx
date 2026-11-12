@@ -51,7 +51,7 @@ export default function Footer() {
                 alt="KLYRO"
                 width={160}
                 height={60}
-                className="h-12 w-auto object-contain"
+                className="h-16 w-auto object-contain"
               />
             </Link>
 
