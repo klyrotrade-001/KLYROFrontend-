@@ -20,15 +20,15 @@ export default function Navbar() {
 
   return (
     <nav className="z-50 border-b border-black/10 bg-[#fbfaf8]/95 backdrop-blur-md">
-      <div className="mx-auto flex h-[120px] max-w-7xl items-center justify-between gap-6 px-5 lg:grid lg:grid-cols-[1fr_auto_auto] lg:px-8">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-5 lg:grid lg:grid-cols-[1fr_auto_auto] lg:px-8">
         <Link href="/" className="shrink-0" aria-label="KLYRO home">
           <Image
-            src="/logoclean.png"
+            src="/logo.png"
             alt="KLYRO"
-            width={160}
-            height={60}
+            width={120}
+            height={50}
             priority
-            className="h-[120px] w-auto object-contain"
+            className="h-10 w-auto object-contain"
           />
         </Link>
 
