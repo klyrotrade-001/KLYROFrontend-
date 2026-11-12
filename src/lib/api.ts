@@ -21,8 +21,7 @@ async function requestApi<T extends object>(
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers,
-    next: { revalidate: 300 }, // Cache for 5 minutes instead of 1 minute
-    cache: 'force-cache',
+    cache: 'no-store', // Always fetch fresh data — no stale product cache
   });
 
   let payload: unknown;
