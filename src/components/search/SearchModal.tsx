@@ -13,20 +13,22 @@ export default function SearchModal() {
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const hasFetchedRef = useRef(false);
 
   useEffect(() => {
     if (isSearchOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
+      // Fetch products only when modal is first opened, not on mount
+      if (!hasFetchedRef.current) {
+        hasFetchedRef.current = true;
+        getProducts({ limit: 100 })
+          .then(setProducts)
+          .catch((error: unknown) => {
+            console.error('Failed to load products for search:', error);
+          });
+      }
     }
   }, [isSearchOpen]);
-
-  useEffect(() => {
-    getProducts({ limit: 100 })
-      .then(setProducts)
-      .catch((error: unknown) => {
-        console.error('Failed to load products for search from the backend:', error);
-      });
-  }, []);
 
   if (!isSearchOpen) return null;
 

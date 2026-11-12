@@ -13,7 +13,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'www.klyroo.online' },
       { protocol: 'https', hostname: 'res.cloudinary.com' },
-      { protocol: 'https', hostname: '**' },
+      { protocol: 'https', hostname: 'klyroback.onrender.com' },
     ],
   },
   async rewrites() {

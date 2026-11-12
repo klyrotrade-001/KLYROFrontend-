@@ -33,14 +33,14 @@ export function useStoreCategories(): CategoryInfo[] {
         cachedCategories = data;
         setCategories(data);
       } else if (retries > 0) {
-        // Empty response — retry after delay
-        setTimeout(() => load(retries - 1), 1500);
+        const id = setTimeout(() => load(retries - 1), 1500);
+        return () => clearTimeout(id);
       }
     } catch (error) {
       console.error('Failed to load categories:', error);
       if (retries > 0) {
-        // Network error — retry with backoff
-        setTimeout(() => load(retries - 1), 2000);
+        const id = setTimeout(() => load(retries - 1), 2000);
+        return () => clearTimeout(id);
       }
     }
   }, []);

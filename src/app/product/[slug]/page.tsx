@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { useCart } from '@/src/context/CartContext';
 import { siteConfig } from '@/src/data/products';
-import { getProducts } from '@/src/lib/api';
+import { getProduct, getProducts } from '@/src/lib/api';
 import { Product } from '@/src/types';
 import ProductCard from '@/src/components/product/ProductCard';
 import ReviewSection from '@/src/components/product/ReviewSection';
@@ -40,18 +40,17 @@ export default function ProductDetailPage() {
     let isMounted = true;
     setLoading(true);
 
-    getProducts()
-      .then((all) => {
+    // Use targeted single-product endpoint instead of fetching all products
+    Promise.all([
+      getProduct(slug),
+      getProducts({ limit: 8 }),
+    ])
+      .then(([found, all]) => {
         if (!isMounted) return;
-        const found = all.find((p) => p.slug === slug);
-        if (found) {
-          setProduct(found);
-          setRelatedProducts(
-            all.filter((p) => p.categorySlug === found.categorySlug && p.id !== found.id).slice(0, 4)
-          );
-        } else {
-          setProduct(null);
-        }
+        setProduct(found);
+        setRelatedProducts(
+          all.filter((p) => p.categorySlug === found.categorySlug && p.id !== found.id).slice(0, 4)
+        );
       })
       .catch(() => {
         if (!isMounted) return;

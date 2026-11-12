@@ -31,8 +31,6 @@ export default function ProductCard({ product, priorityImage = false }: ProductC
   };
 
   const handleBuyNow = () => {
-    // Direct checkout - send only ID/slug to avoid URL length issues
-    console.log('BUY NOW CLICKED - Going to checkout page');
     const minimalData = {
       productId: product.id,
       slug: product.slug,
@@ -40,7 +38,6 @@ export default function ProductCard({ product, priorityImage = false }: ProductC
       variant: product.variants?.[0]?.options[0]
     };
     const encodedData = encodeURIComponent(JSON.stringify(minimalData));
-    console.log('Navigating to:', `/checkout?buyNow=${encodedData}`);
     router.push(`/checkout?buyNow=${encodedData}`);
   };
 

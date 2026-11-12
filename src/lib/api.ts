@@ -21,6 +21,7 @@ async function requestApi<T extends object>(
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers,
+    next: { revalidate: 60 },
   });
 
   let payload: unknown;
