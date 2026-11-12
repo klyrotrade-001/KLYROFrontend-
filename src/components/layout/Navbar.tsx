@@ -23,9 +23,9 @@ export default function Navbar() {
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-5 lg:grid lg:grid-cols-[1fr_auto_auto] lg:px-8">
         <Link href="/" className="shrink-0" aria-label="KLYRO home">
           <Image
-            src="/logoclean.png"
+            src="/image.png"
             alt="KLYRO"
-            width={160}
+            width={140}
             height={56}
             priority
             className="h-14 w-auto object-contain"
