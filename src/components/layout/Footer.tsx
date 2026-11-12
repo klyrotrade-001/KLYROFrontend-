@@ -47,7 +47,7 @@ export default function Footer() {
           <div className="lg:col-span-4">
             <Link href="/" className="flex items-center" aria-label="KLYRO home">
               <Image
-                src="/logo clean.png"
+                src="/logo-clean.png"
                 alt="KLYRO"
                 width={160}
                 height={60}
