@@ -77,12 +77,22 @@ export async function getCategories(): Promise<CategoryInfo[]> {
 }
 
 export async function createOrder(customer: CustomerDetails, items: CartItem[]) {
+  // Strip product images from order items — they bloat the payload (base64 = 413 error)
+  const leanItems = items.map((item) => ({
+    productId: item.product.id,
+    name: item.product.name,
+    price: item.product.price,
+    quantity: item.quantity,
+    selectedVariant: item.selectedVariant,
+    categorySlug: item.product.categorySlug,
+  }));
+
   return requestApi<{
     orderId: string;
     whatsappUrl?: string;
   }>('/orders', {
     method: 'POST',
-    body: JSON.stringify({ customer, items }),
+    body: JSON.stringify({ customer, items: leanItems }),
   });
 }
 
